@@ -39,18 +39,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			w.WriteHeader(400)
+			log.Print(400400400400)
 		} else {
 			w.WriteHeader(500)
 		}
 		return
 	}
-
+	log.Print(GGGGGGGGG)
 	for _, event := range events {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
 					log.Print(err)
+					log.Print(QQQQQQQ)
 				}
 			}
 		}
