@@ -78,7 +78,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						//QQ
 					}
-					bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
+					bot.PushMessage(groupID, linebot.NewTextMessage(res.DisplayName +"decide to ..."+message.Text)).Do()
 					log.Print(res.DisplayName)
 					log.Print(res.StatusMessage)
 
