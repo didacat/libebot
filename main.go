@@ -62,6 +62,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				if message.Text == "/vote"{
 					log.Print("Start Vote")
+					bot.PushMessage(groupID, linebot.NewTextMessage("Start Vote!")).Do()
+					isVote = true;
 				}
 				log.Print(event.ReplyToken)
 				log.Print(message.Text)
