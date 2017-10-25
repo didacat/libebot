@@ -69,6 +69,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(groupID, linebot.NewTextMessage("Stop Vote!")).Do()
 					isVote = false;
 				}
+				
+				if message.Text[0:6] == "/vote " && isvote == true {
+					log.Print("user input" message.Text)
+					bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
+				}
 				log.Print(event.ReplyToken)
 				log.Print(message.Text)
 			}
