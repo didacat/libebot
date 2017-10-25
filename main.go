@@ -57,9 +57,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
-					log.Print(err)
-				}*/
 				if message.Text == "/vote"{
 					log.Print("Start Vote")
 					bot.PushMessage(groupID, linebot.NewTextMessage("Start Vote!")).Do()
