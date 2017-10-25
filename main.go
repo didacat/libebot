@@ -55,10 +55,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(RoomID)
 			
 			
-			switch message := event.Message.(Type) {
+			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
 					log.Print(err)
+				}
+				if message.Text == "/vote"{
+					log.Print("Start Vote")
 				}
 				log.Print(event.ReplyToken)
 				log.Print(message.Text)
