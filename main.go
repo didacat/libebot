@@ -74,10 +74,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if message.Text[0:6] == "/vote " && isVote == true {
 
 					//log.Print("user input" message.Text)
-					res, err := bot.GetUserProfile(userID).Do();
-					if err != nil {
-						bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
-					}
+					bot.GetUserProfile(userID).Do();
+					
 					log.Print(res.Displayname)
 					log.Print(res.PicutureURL)
 					log.Print(res.StatusMessage)
