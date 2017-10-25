@@ -22,7 +22,7 @@ import (
 )
 
 var bot *linebot.Client
-
+var isVote bool = false
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -31,6 +31,7 @@ func main() {
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
+	
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
@@ -52,14 +53,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(userID)
 			log.Print(groupID)
 			log.Print(RoomID)
-			switch message := event.Message.(type) {
+			
+			
+			switch message := event.Message.(Type) {
 			case *linebot.TextMessage:
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
 					log.Print(err)
 				}
-				
-				bot.PushMessage(groupID, linebot.NewTextMessage(message.ID+":"+message.Text+" OK3!")).Do()
-				bot.PushMessage(groupID, linebot.NewTextMessage(message.ID+":"+message.Text+" OK4!")).Do()
+				if message.Text == "/vote"{
+					log.Print("Start Vote")
+				}
 				log.Print(event.ReplyToken)
 				log.Print(message.Text)
 			}
