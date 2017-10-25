@@ -76,8 +76,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					//log.Print("user input" message.Text)
 					res, err := bot.GetProfile(userID).Do();
 					if err != nil {
-						bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
+						//QQ
 					}
+					bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
 					log.Print(res.DisplayName)
 					log.Print(res.StatusMessage)
 
