@@ -78,8 +78,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
 					}
-					log.Print(res.Displayname)
-					log.Print(res.PicutureURL)
+					log.Print(res.DisplayName)
 					log.Print(res.StatusMessage)
 
 					
