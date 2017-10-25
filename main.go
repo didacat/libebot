@@ -70,7 +70,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					isVote = false;
 				}
 				
-				if message.Text[0:6] == "/vote " && isvote == true {
+				if message.Text[0:6] == "/vote " && isVote == true {
 					log.Print("user input" + message.Text)
 					bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
 				}
