@@ -25,9 +25,11 @@ func main() {
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	// appBaseURL  :=os.Getenv("ENDPOINT_BASE")
-	// log.Println("APP_BASE_URL = ")
-	// log.Println(appBaseURL)
+	appBaseURL  := linebot.APIEndpointBase
+	// appBaseURL = linebot.APIEndpointBase
+	log.Println("APP_BASE_URL = ")
+	log.Println(appBaseURL)
+	
 	events, err := bot.ParseRequest(r)
 
 	if err != nil {
