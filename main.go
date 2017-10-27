@@ -25,7 +25,7 @@ func main() {
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	appBaseURL  := linebot.APIEndpointBase
+	appBaseURL  := linebot.WithEndpointBase(linebot.APIEndpointBase)
 	// appBaseURL = linebot.APIEndpointBase
 	log.Println("APP_BASE_URL = ")
 	log.Println(appBaseURL)
