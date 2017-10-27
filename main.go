@@ -37,7 +37,7 @@ func main() {
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	appBaseURL  := os.Getenv("AppBaseUrl")
+	appBaseURL  := os.Getenv("EndPointBase")
 	log.Println("APP_BASE_URL = ")
 	log.Println(appBaseURL)
 	events, err := bot.ParseRequest(r)
