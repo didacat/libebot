@@ -87,13 +87,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 
-				if message.Text == "/pic" {
+					if message.Text == "/pic" {
 					log.Print("Pic Receive")
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
+							"image",
 						"https://github.com/didacat/linebot/blob/master/images/linebotH1.png",
-						"Imagemap alt text"	,	
 						)		,		
 					).Do(); 
 				}
