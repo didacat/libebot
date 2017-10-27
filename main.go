@@ -92,8 +92,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-							"image",
 						"https://github.com/didacat/linebot/blob/master/images/linebotH1.png",
+						"https://github.com/didacat/linebot/blob/master/images/linebotH1.png"	,	
 						)		,		
 					).Do(); 
 				}
