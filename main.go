@@ -103,7 +103,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImagemapMessage(
-							"https://github.com/didacat/linebot/tree/master/images",
+							"https://github.com/didacat/linebot/tree/master/images/1040",
 							"Imagemap alt text",
 							linebot.ImagemapBaseSize{1040, 1040},
 							linebot.NewURIImagemapAction("https://raw.githubusercontent.com/didacat/linebot/master/images/1.png", linebot.ImagemapArea{0, 0, 520, 520}),
