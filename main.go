@@ -73,28 +73,36 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(groupID, linebot.NewTextMessage("Stop Vote!")).Do()
 					isVote = false
 				}
-				if(len(message.Text) > 6){
-					if message.Text[0:6] == "/vote " && isVote == true {
-						
-										//log.Print("user input" message.Text)
-											res, err := bot.GetProfile(userID).Do();
-											if err != nil {
-												bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
-											}
-											log.Print(res.DisplayName)
-											// log.Print(res.PicutureURL)
-											// log.Print(res.StatusMessage)
-						
-											
-										}
-				}
 				
+				if(len(message.Text) > 6){
+					if message.Text[0:6] == "/vote " && isVote == true {						
+					//log.Print("user input" message.Text)
+						res, err := bot.GetProfile(userID).Do();
+						if err != nil {
+							bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
+						}
+						log.Print(res.DisplayName)
+						// log.Print(res.PicutureURL)
+						// log.Print(res.StatusMessage)						
+					}
+				}
 
 				if message.Text == "/pic" {
 					log.Print("Pic Receive")
-					bot.PushMessage(groupID, linebot.NewTextMessage("Pic Receive")).Do()
+					bot.PushMessage(
+						groupID, 
+						linebot.NewImagemapMessage(
+						"https://github.com/didacat/linebot/image/",
+						"Imagemap alt text",
+						linebot.ImagemapBaseSize{1040, 1040},
+						linebot.NewURIImagemapAction("https://store.line.me/family/manga/en", linebot.ImagemapArea{0, 0, 520, 520}),
+						linebot.NewURIImagemapAction("https://store.line.me/family/music/en", linebot.ImagemapArea{520, 0, 520, 520}),
+						linebot.NewURIImagemapAction("https://store.line.me/family/play/en", linebot.ImagemapArea{0, 520, 520, 520}),
+						linebot.NewMessageImagemapAction("URANAI!", linebot.ImagemapArea{520, 520, 520, 520}),
+						),
+					).Do(); 
 				}
-				// log.Print(event.ReplyToken)
+				log.Print(event.ReplyToken)
 				log.Print(message.Text)
 			}
 		}
