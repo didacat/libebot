@@ -73,26 +73,28 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(groupID, linebot.NewTextMessage("Stop Vote!")).Do()
 					isVote = false
 				}
-				
-				if message.Text[0:6] == "/vote " && isVote == true {
-
-				//log.Print("user input" message.Text)
-					res, err := bot.GetProfile(userID).Do();
-					if err != nil {
-						bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
-					}
-					log.Print(res.DisplayName)
-					// log.Print(res.PicutureURL)
-					// log.Print(res.StatusMessage)
-
-					
+				if(len(message.Text) > 6){
+					if message.Text[0:6] == "/vote " && isVote == true {
+						
+										//log.Print("user input" message.Text)
+											res, err := bot.GetProfile(userID).Do();
+											if err != nil {
+												bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
+											}
+											log.Print(res.DisplayName)
+											// log.Print(res.PicutureURL)
+											// log.Print(res.StatusMessage)
+						
+											
+										}
 				}
+				
 
 				if message.Text == "/pic" {
 					log.Print("Pic Receive")
 					bot.PushMessage(groupID, linebot.NewTextMessage("Pic Receive")).Do()
 				}
-				log.Print(event.ReplyToken)
+				// log.Print(event.ReplyToken)
 				log.Print(message.Text)
 			}
 		}
