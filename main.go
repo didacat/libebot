@@ -92,7 +92,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImagemapMessage(
-						"https://github.com/didacat/linebot/images/",
+						"https://github.com/didacat/linebot/images",
 						"Imagemap alt text",
 						linebot.ImagemapBaseSize{1040, 1040},
 						linebot.NewURIImagemapAction("https://store.line.me/family/manga/en", linebot.ImagemapArea{0, 0, 520, 520}),
