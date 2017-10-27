@@ -37,6 +37,8 @@ func main() {
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
+	appBaseURL  := os.Getenv("APP_BASE_URL")
+	log.Println("appBaseURL")
 	events, err := bot.ParseRequest(r)
 
 	if err != nil {
@@ -103,7 +105,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImagemapMessage(
-							"https://github.com/didacat/linebot/images/1040",
+							appBaseURL + "images/",
 							"Imagemap alt text",
 							linebot.ImagemapBaseSize{1040, 1040},
 							linebot.NewURIImagemapAction("https://raw.githubusercontent.com/didacat/linebot/master/images/1.png", linebot.ImagemapArea{0, 0, 520, 520}),
