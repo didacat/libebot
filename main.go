@@ -97,6 +97,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						)		,		
 					).Do(); 
 				}
+				
+					if message.Text == "/picall" {
+					log.Print("Pic Receive")
+					bot.PushMessage(
+						groupID, 
+						linebot.NewImagemapMessage(
+							"https://github.com/didacat/linebot/tree/master/images",
+							"Imagemap alt text",
+							linebot.ImagemapBaseSize{1040, 1040},
+							linebot.NewURIImagemapAction("https://store.line.me/family/manga/en", linebot.ImagemapArea{0, 0, 520, 520}),
+							linebot.NewURIImagemapAction("https://store.line.me/family/music/en", linebot.ImagemapArea{520, 0, 520, 520}),
+							linebot.NewURIImagemapAction("https://store.line.me/family/play/en", linebot.ImagemapArea{0, 520, 520, 520}),
+							linebot.NewMessageImagemapAction("URANAI!", linebot.ImagemapArea{520, 520, 520, 520}),
+						)		,		
+					).Do(); 
+				}
 				log.Print(event.ReplyToken)
 				log.Print(message.Text)
 			}
