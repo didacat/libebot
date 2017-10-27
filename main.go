@@ -90,9 +90,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				if message.Text == "/pic" {
 					log.Print("Pic Receive")
-					bot.PushMessage(
-						groupID, 
-						linebot.NewTextMessage("Pic Receive")).Do(); 
+					bot.PushMessage(groupID, linebot.NewTextMessage("Pic Receive")).Do()
 				}
 				log.Print(event.ReplyToken)
 				log.Print(message.Text)
