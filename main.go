@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	
 	"io"
 	"io/ioutil"
 	"log"
@@ -128,14 +128,7 @@ func (app *KitchenSink) Callback(w http.ResponseWriter, r *http.Request) {
 			}
 		case linebot.EventTypeLeave:
 			log.Printf("Left: %v", event)
-		case linebot.EventTypePostback:
-			data := event.Postback.Data
-			if data == "DATE" || data == "TIME" || data == "DATETIME" {
-				data += fmt.Sprintf("(%v)", *event.Postback.Params)
-			}
-			if err := app.replyText(event.ReplyToken, "Got postback: "+data); err != nil {
-				log.Print(err)
-			}
+		
 		case linebot.EventTypeBeacon:
 			if err := app.replyText(event.ReplyToken, "Got beacon: "+event.Beacon.Hwid); err != nil {
 				log.Print(err)
@@ -211,32 +204,7 @@ func (app *KitchenSink) handleText(message *linebot.TextMessage, replyToken stri
 		).Do(); err != nil {
 			return err
 		}
-	case "image carousel":
-		imageURL := app.appBaseURL + "/static/buttons/1040.jpg"
-		template := linebot.NewImageCarouselTemplate(
-			linebot.NewImageCarouselColumn(
-				imageURL,
-				linebot.NewURITemplateAction("Go to LINE", "https://line.me"),
-			),
-			linebot.NewImageCarouselColumn(
-				imageURL,
-				linebot.NewPostbackTemplateAction("Say hello1", "hello こんにちは", ""),
-			),
-			linebot.NewImageCarouselColumn(
-				imageURL,
-				linebot.NewMessageTemplateAction("Say message", "Rice=米"),
-			),
-			linebot.NewImageCarouselColumn(
-				imageURL,
-				linebot.NewDatetimePickerTemplateAction("datetime", "DATETIME", "datetime", "", "", ""),
-			),
-		)
-		if _, err := app.bot.ReplyMessage(
-			replyToken,
-			linebot.NewTemplateMessage("Image carousel alt text", template),
-		).Do(); err != nil {
-			return err
-		}
+	
 	case "datetime":
 		template := linebot.NewButtonsTemplate(
 			"", "", "Select date / time !",
