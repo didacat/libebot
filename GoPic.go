@@ -1,4 +1,4 @@
-package main
+package gopic
 
 
 import (
@@ -19,7 +19,7 @@ picheight int = 480
 
 
 // 大家可以查看这个网址看看这个image包的使用方法 http://golang.org/doc/articles/image_draw.html
-func main() {
+func gopic() {
 http.HandleFunc("/", TTT)
 http.ListenAndServe(":999", nil)
 }
