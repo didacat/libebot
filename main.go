@@ -25,10 +25,10 @@ func main() {
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	appBaseURL  := linebot.WithEndpointBase(linebot.APIEndpointBase)
+	// appBaseURL  := linebot.WithEndpointBase(linebot.APIEndpointBase)
 	// appBaseURL = linebot.APIEndpointBase
-	log.Println("APP_BASE_URL = ")
-	log.Println(appBaseURL)
+	// log.Println("APP_BASE_URL = ")
+	// log.Println(appBaseURL)
 	
 	events, err := bot.ParseRequest(r)
 
@@ -85,8 +85,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-						"https://raw.githubusercontent.com/didacat/linebot/master/images/linebotH1.png",
-						"https://raw.githubusercontent.com/didacat/linebot/master/images/linebotH1.png"	,	
+						"https://github.com/didacat/linebot/blob/master/GoPic.go",
+						"https://github.com/didacat/linebot/blob/master/GoPic.go"	,	
 						)		,		
 					).Do(); 
 				}
