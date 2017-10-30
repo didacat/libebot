@@ -1,4 +1,4 @@
-package GoPic
+package main
 
 
 import (
