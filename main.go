@@ -85,8 +85,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-						"localhost:999/",
-						"localhost:999/"	,	
+						"https://raw.githubusercontent.com/didacat/linebot/master/images/1.png",
+						"https://raw.githubusercontent.com/didacat/linebot/master/images/1.png"	,	
 						)		,		
 					).Do(); 
 				}
@@ -96,7 +96,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImagemapMessage(
-							"https://github.com/didacat/linebot/blob/master/TestPic/GoPic.go",
+							"https://github.com/didacat/linebot/tree/master/images",
 							"Imagemap alt text",
 							linebot.ImagemapBaseSize{1040, 1040},
 							linebot.NewURIImagemapAction("https://raw.githubusercontent.com/didacat/linebot/master/images/1.png", linebot.ImagemapArea{0, 0, 520, 520}),
