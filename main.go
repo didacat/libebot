@@ -205,19 +205,7 @@ func (app *KitchenSink) handleText(message *linebot.TextMessage, replyToken stri
 			return err
 		}
 	
-	case "datetime":
-		template := linebot.NewButtonsTemplate(
-			"", "", "Select date / time !",
-			linebot.NewDatetimePickerTemplateAction("date", "DATE", "date", "", "", ""),
-			linebot.NewDatetimePickerTemplateAction("time", "TIME", "time", "", "", ""),
-			linebot.NewDatetimePickerTemplateAction("datetime", "DATETIME", "datetime", "", "", ""),
-		)
-		if _, err := app.bot.ReplyMessage(
-			replyToken,
-			linebot.NewTemplateMessage("Datetime pickers alt text", template),
-		).Do(); err != nil {
-			return err
-		}
+	
 	case "imagemap":
 		if _, err := app.bot.ReplyMessage(
 			replyToken,
