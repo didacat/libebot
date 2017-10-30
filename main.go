@@ -17,7 +17,7 @@ func main() {
 	app, err := NewKitchenSink(
 		os.Getenv("ChannelSecret"),
 		os.Getenv("ChannelAccessToken"),
-		os.Getenv("APP_BASE_URL"),
+		os.Getenv("AppBaseURL"),
 	)
 	if err != nil {
 		log.Fatal(err)
