@@ -159,6 +159,9 @@ func (app *KitchenSink) handleText(message *linebot.TextMessage, replyToken stri
 		}
 	case "buttons":
 		imageURL := app.appBaseURL + "/static/buttons/1040.jpg"
+		log.Print("app.appBaseURL == " )
+		log.Print(app.appBaseURL )
+
 		template := linebot.NewButtonsTemplate(
 			imageURL, "My button sample", "Hello, my button",
 			linebot.NewURITemplateAction("Go to line.me", "https://line.me"),
