@@ -21,6 +21,8 @@ func main() {
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
+	log.Println("port = "port)
+	log.Println("Adde = "addr)
 	
 }
 
@@ -30,6 +32,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	// log.Println("APP_BASE_URL = ")
 	// log.Println(appBaseURL)
 	log.Println(r.URL.Path)
+	log.Println(r.URL)
 	events, err := bot.ParseRequest(r)
 
 	if err != nil {
