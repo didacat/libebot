@@ -21,8 +21,8 @@ func main() {
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
-	log.Println("port = "port)
-	log.Println("Adde = "addr)
+	log.Println("port = " + port)
+	log.Println("Adde = " + addr)
 	
 }
 
