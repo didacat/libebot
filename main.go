@@ -43,6 +43,8 @@ func main() {
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("port = " + port)
 	log.Println("Adde = " + addr)
+	log.Println(w)
+	log.Println(r)
 	events, err := bot.ParseRequest(r)
 
 	getImg("https://raw.githubusercontent.com/didacat/linebot/master/images/1.png")
@@ -159,7 +161,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						groupID, 
 						linebot.NewImageMessage(
 							"https://didacat123.herokuapp.com/1.png",
-							"https://didacat123.herokuapp.com/1.png"	,	
+							"https://didacat123.herokuapp.com/1.png",	
 							)		,	
 					).Do(); 
 				}
