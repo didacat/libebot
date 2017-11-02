@@ -15,7 +15,7 @@ var bot *linebot.Client
 var port =""
 var addr =""
 var isGameStart bool = false
-var s []int
+var s []string
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -77,19 +77,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						printSlice(s)
 					
 						// append works on nil slices.
-						s = append(s, 0)
+						s = append(s, "0")
 						printSlice(s)
 					
 						// The slice grows as needed.
-						s = append(s, 1)
+						s = append(s, "1")
 						printSlice(s)
 					
 						// We can add more than one element at a time.
-						s = append(s, 2, 3, 4)
+						s = append(s, "2, 3, 4")
 						printSlice(s)
 					
-						primes := [6]int{2, 3, 5, 7, 11, 13}
-						fmt.Println(primes)
 						log.Print(res.DisplayName)
 						log.Print(UserName)
 
