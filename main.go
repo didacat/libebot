@@ -14,7 +14,7 @@ import (
 var bot *linebot.Client
 var port =""
 var addr =""
-var isVote bool = false
+var isGameStart bool = false
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -53,18 +53,18 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
 					log.Print(err)
 				}*/
-				if message.Text == "/vote" && isVote == false {
-					log.Print("Start Vote")
-					bot.PushMessage(groupID, linebot.NewTextMessage("Start Vote!")).Do()
-					isVote = true
-				}else if message.Text == "/stopvote" && isVote == true {
-					log.Print("Stop Vote")
-					bot.PushMessage(groupID, linebot.NewTextMessage("Stop Vote!")).Do()
-					isVote = false
+				if message.Text == "/dice" && isVote == false {
+					log.Print("Start DiceGame")
+					bot.PushMessage(groupID, linebot.NewTextMessage("Start DiceGame!")).Do()
+					isGameStart = true
+				}else if message.Text == "/stopdice" && isVote == true {
+					log.Print("Stop DiceGame")
+					bot.PushMessage(groupID, linebot.NewTextMessage("Stop DiceGame!")).Do()
+					isGameStart = false
 				}
 				
 				if(len(message.Text) > 6){
-					if message.Text[0:6] == "/vote " && isVote == true {						
+					if message.Text[0:6] == "/dice " && isVote == true {						
 					//log.Print("user input" message.Text)
 						res, err := bot.GetProfile(userID).Do();
 						if err != nil {
