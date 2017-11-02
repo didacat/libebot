@@ -6,10 +6,13 @@ import (
 	"net/http"
 	"os"
 
-	// "io"
+	"bytes"
+	"io"
 	// "path"
 	// "errors"
-	// "strings"
+	"strings"
+	"io/ioutil"
+
 	"image"
 	"image/draw"
     "image/gif"
@@ -42,6 +45,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	// log.Println("Adde = " + addr)
 	events, err := bot.ParseRequest(r)
 
+	getImg("https://raw.githubusercontent.com/didacat/linebot/master/images/1.png")
+	getImg("https://raw.githubusercontent.com/didacat/linebot/master/images/2.png")
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			w.WriteHeader(400)
@@ -103,14 +108,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				if message.Text == "/picall" {
 
-					src, err := GetImageObj("https://raw.githubusercontent.com/didacat/linebot/master/images/1.png")
+					src, err := GetImageObj("1.png")
 					if err != nil {
 						log.Println( "err:", err)
 						log.Printf("Error1")
 					}
 					srcB := src.Bounds().Max
 
-					src1, err := GetImageObj("https://raw.githubusercontent.com/didacat/linebot/master/images/2.png")
+					src1, err := GetImageObj("2.png")
 					if err != nil {
 						log.Println( "err:", err)
 						log.Printf("Error2")
@@ -211,4 +216,21 @@ func GetImageObj(filePath string) (img image.Image, err error) {
         return nil, err
     }
     return img, nil
+}
+
+func getImg(url string) (n int64, err error) {
+    path := strings.Split(url, "/")
+    var name string
+    if len(path) > 1 {
+        name = path[len(path)-1]
+    }
+    fmt.Println(name)
+    out, err := os.Create(name)
+    defer out.Close()
+    resp, err := http.Get(url)
+    defer resp.Body.Close()
+    pix, err := ioutil.ReadAll(resp.Body)
+    n, err = io.Copy(out, bytes.NewReader(pix))
+    return
+
 }
