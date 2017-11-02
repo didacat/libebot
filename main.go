@@ -160,8 +160,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-							"https://didacat123.herokuapp.com/1.png",
-							"https://didacat123.herokuapp.com/1.png",	
+							"https://didacat123.herokuapp.com/callback/1.png",
+							"https://didacat123.herokuapp.com/callback/1.png",	
 							)		,	
 					).Do(); 
 				}
