@@ -72,12 +72,21 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						UserName := message.Text[6:len(message.Text)]
 						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲")).Do()
-						var a [2]string
-						a[0] = "Hello"
-						a[1] = "World"
-						fmt.Println(a[0], a[1])
-						fmt.Println(a)
-
+						var s []int
+						printSlice(s)
+					
+						// append works on nil slices.
+						s = append(s, 0)
+						printSlice(s)
+					
+						// The slice grows as needed.
+						s = append(s, 1)
+						printSlice(s)
+					
+						// We can add more than one element at a time.
+						s = append(s, 2, 3, 4)
+						printSlice(s)
+					
 						primes := [6]int{2, 3, 5, 7, 11, 13}
 						fmt.Println(primes)
 						log.Print(res.DisplayName)
@@ -115,4 +124,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+}
+func printSlice(s []int) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
 }
