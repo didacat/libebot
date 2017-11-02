@@ -72,7 +72,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Print(err)
 						}
 						UserName := message.Text[6:len(message.Text)]
-						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲")).Do()
+						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲/n" + "目前玩家有 : ")).Do()
 						
 						printSlice(s)
 					
