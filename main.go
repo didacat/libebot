@@ -73,8 +73,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						UserName := message.Text[6:len(message.Text)]
 						UserNameSlice= append(UserNameSlice, UserName)
-						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲\n" + "目前玩家有 : " + UserNameSlice)).Do()
+						TotalUser := ""
+						for _, value := range UserNameSlice {
+							TotalUser += value
+						}
 
+						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲\n" + "目前玩家有 : " + TotalUser)).Do()
+						
+						
+					
 						log.Print(res.DisplayName)
 						log.Print(UserName)
 
