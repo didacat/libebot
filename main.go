@@ -64,14 +64,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				
 				if(len(message.Text) > 6){
-					if message.Text[0:6] == "/dice " && isGameStart == true {						
+					if message.Text[0:6] == "/dice " && isGameStart == true {				
 					//log.Print("user input" message.Text)
 						res, err := bot.GetProfile(userID).Do();
 						if err != nil {
 							log.Print(err)
 						}
+						UserName := message.Text[6:len(message.Text)]
 						bot.PushMessage(groupID, linebot.NewTextMessage(message.Text)).Do()
 						log.Print(res.DisplayName)
+						log.Print(UserName)
 						// log.Print(res.PicutureURL)
 						// log.Print(res.StatusMessage)						
 					}
