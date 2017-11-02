@@ -15,7 +15,6 @@ var bot *linebot.Client
 var port =""
 var addr =""
 var isGameStart bool = false
-var UserNameSlice []string
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -73,10 +72,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						UserName := message.Text[6:len(message.Text)]
 						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲")).Do()
-						UserNameSlice.append(UserNameSlice,UserName);
-						for index, element := range UserNameSlice{
-							bot.PushMessage(groupID, linebot.NewTextMessage(element + " 已加入遊戲")).Do()
-						}
+						var a [2]string
+						a[0] = "Hello"
+						a[1] = "World"
+						fmt.Println(a[0], a[1])
+						fmt.Println(a)
+
+						primes := [6]int{2, 3, 5, 7, 11, 13}
+						fmt.Println(primes)
 						log.Print(res.DisplayName)
 						log.Print(UserName)
 
