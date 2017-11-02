@@ -56,7 +56,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}*/
 				if message.Text == "/dice" && isGameStart == false {
 					log.Print("Start DiceGame")
-					bot.PushMessage(userID, linebot.NewTextMessage("Start DiceGame!")).Do()
+					bot.PushMessage(groupID, linebot.NewTextMessage("Start DiceGame!")).Do()
 					isGameStart = true
 				}else if message.Text == "/stopdice" && isGameStart == true {
 					log.Print("Stop DiceGame")
@@ -107,8 +107,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-							"https://raw.githubusercontent.com/didacat/linebot/master/images/2.png",
-							"https://raw.githubusercontent.com/didacat/linebot/master/images/2.png",
+							"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
+							"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
 							)		,	
 					).Do(); 
 				}
