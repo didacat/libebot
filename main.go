@@ -74,9 +74,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						UserName := message.Text[6:len(message.Text)]
 						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲")).Do()
 						UserNameSlice.append(1);
-						for index, element := range UserNameSlice{
-							bot.PushMessage(groupID, linebot.NewTextMessage(element + " 已加入遊戲")).Do()
-						}
+						// for index, element := range UserNameSlice{
+						// 	bot.PushMessage(groupID, linebot.NewTextMessage(element + " 已加入遊戲")).Do()
+						// }
 						log.Print(res.DisplayName)
 						log.Print(UserName)
 
