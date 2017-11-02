@@ -15,7 +15,7 @@ import (
     "image/gif"
     "image/jpeg"
 	"image/png"
-	"github.com/nfnt/resize"
+	// "github.com/nfnt/resize"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -140,9 +140,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					var opt jpeg.Options
 					opt.Quality = 80
 				
-					newImage := resize.Resize(1024, 0, des, resize.Lanczos3)
+					// newImage := resize.Resize(1024, 0, des, resize.Lanczos3)
 				
-					err = jpeg.Encode(fSave, newImage, &opt) // put quality to 80%
+					err = jpeg.Encode(fSave, des, &opt) // put quality to 80%
 					if err != nil {
 						log.Println( "err:", err)
 						log.Printf("Error4")
