@@ -56,7 +56,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}*/
 				if message.Text == "/dice" && isGameStart == false {
 					log.Print("Start DiceGame")
-					bot.PushMessage(groupID, linebot.NewTextMessage("Start DiceGame!")).Do()
+					bot.PushMessage(userID, linebot.NewTextMessage("Start DiceGame!")).Do()
 					isGameStart = true
 				}else if message.Text == "/stopdice" && isGameStart == true {
 					log.Print("Stop DiceGame")
