@@ -158,8 +158,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-							"https://didacat123.herokuapp.com/7.png",
-							"https://didacat123.herokuapp.com/7.png"	,	
+							"https://didacat123.herokuapp.com/1.png",
+							"https://didacat123.herokuapp.com/1.png"	,	
 							)		,	
 					).Do(); 
 				}
@@ -224,7 +224,7 @@ func getImg(url string) (n int64, err error) {
     if len(path) > 1 {
         name = path[len(path)-1]
     }
-    fmt.Println(name)
+    log.Println(name)
     out, err := os.Create(name)
     defer out.Close()
     resp, err := http.Get(url)
