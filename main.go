@@ -6,33 +6,39 @@ import (
 	"net/http"
 	"os"
 
+	// "io"
+	// "path"
+	// "errors"
+	// "strings"
+	// "image"
+	// "image/draw"
+    // "image/gif"
+    // "image/jpeg"
+	// "image/png"
+
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 
 
 var bot *linebot.Client
+var port =""
+var addr =""
 var isVote bool = false
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
-	port := os.Getenv("PORT")
-	addr := fmt.Sprintf(":%s", port)
+	port = os.Getenv("PORT")
+	addr = fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
-	log.Println("port = " + port)
-	log.Println("Adde = " + addr)
 	
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	// appBaseURL  := linebot.WithEndpointBase(linebot.APIEndpointBase)
-	// appBaseURL = linebot.APIEndpointBase
-	// log.Println("APP_BASE_URL = ")
-	// log.Println(appBaseURL)
-	log.Println(r.URL.Path)
-	log.Println(r.URL)
+	// log.Println("port = " + port)
+	// log.Println("Adde = " + addr)
 	events, err := bot.ParseRequest(r)
 
 	if err != nil {
@@ -88,8 +94,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-						"https://github.com/didacat/linebot/blob/master/GoPic.go",
-						"https://github.com/didacat/linebot/blob/master/GoPic.go"	,	
+						"https://raw.githubusercontent.com/didacat/linebot/master/images/1.png",
+						"https://raw.githubusercontent.com/didacat/linebot/master/images/1.png"	,	
 						)		,		
 					).Do(); 
 				}
@@ -98,15 +104,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print("Pic Receive")
 					bot.PushMessage(
 						groupID, 
-						linebot.NewImagemapMessage(
-							"https://github.com/didacat/linebot/tree/master/images",
-							"Imagemap alt text",
-							linebot.ImagemapBaseSize{1040, 1040},
-							linebot.NewURIImagemapAction("https://raw.githubusercontent.com/didacat/linebot/master/images/1.png", linebot.ImagemapArea{0, 0, 520, 520}),
-							linebot.NewURIImagemapAction("https://raw.githubusercontent.com/didacat/linebot/master/images/2.png", linebot.ImagemapArea{520, 0, 520, 520}),
-							linebot.NewURIImagemapAction("https://raw.githubusercontent.com/didacat/linebot/master/images/3.png", linebot.ImagemapArea{0, 520, 520, 520}),
-							linebot.NewMessageImagemapAction("URANAI!", linebot.ImagemapArea{520, 520, 520, 520}),
-						)		,		
+						linebot.NewImageMessage(
+							"https://raw.githubusercontent.com/didacat/linebot/master/images/2.png",
+							"https://raw.githubusercontent.com/didacat/linebot/master/images/2.png"	,	
+							)		,	
 					).Do(); 
 				}
 				log.Print(event.ReplyToken)
