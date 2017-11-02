@@ -15,7 +15,7 @@ var bot *linebot.Client
 var port =""
 var addr =""
 var isGameStart bool = false
-var s []string
+var UserNameSlice []string
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -72,22 +72,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Print(err)
 						}
 						UserName := message.Text[6:len(message.Text)]
-						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲\n" + "目前玩家有 : ")).Do()
-						
-						printSlice(s)
-					
-						// append works on nil slices.
-						s = append(s, UserName)
-						printSlice(s)
-					
-						// The slice grows as needed.
-						s = append(s, "1")
-						printSlice(s)
-					
-						// We can add more than one element at a time.
-						s = append(s, "2, 3, 4")
-						printSlice(s)
-					
+						UserNameSlice= append(UserNameSlice, UserName)
+						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲\n" + "目前玩家有 : " + UserNameSlice)).Do()
+
 						log.Print(res.DisplayName)
 						log.Print(UserName)
 
@@ -123,8 +110,4 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-}
-
-func printSlice(s []string) {
-	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
 }
