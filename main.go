@@ -53,18 +53,18 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
 					log.Print(err)
 				}*/
-				if message.Text == "/dice" && isVote == false {
+				if message.Text == "/dice" && isGameStart == false {
 					log.Print("Start DiceGame")
 					bot.PushMessage(groupID, linebot.NewTextMessage("Start DiceGame!")).Do()
 					isGameStart = true
-				}else if message.Text == "/stopdice" && isVote == true {
+				}else if message.Text == "/stopdice" && isGameStart == true {
 					log.Print("Stop DiceGame")
 					bot.PushMessage(groupID, linebot.NewTextMessage("Stop DiceGame!")).Do()
 					isGameStart = false
 				}
 				
 				if(len(message.Text) > 6){
-					if message.Text[0:6] == "/dice " && isVote == true {						
+					if message.Text[0:6] == "/dice " && isGameStart == true {						
 					//log.Print("user input" message.Text)
 						res, err := bot.GetProfile(userID).Do();
 						if err != nil {
