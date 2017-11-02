@@ -77,7 +77,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						printSlice(s)
 					
 						// append works on nil slices.
-						s = append(s, "0")
+						s = append(s, UserName)
 						printSlice(s)
 					
 						// The slice grows as needed.
