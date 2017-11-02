@@ -134,7 +134,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					draw.Draw(des, des.Bounds(), src, src.Bounds().Min, draw.Over)                      //首先将一个图片信息存入jpg
 					draw.Draw(des, image.Rect(srcWidth, 0, newWidth, src1B.Y), src1, image.ZP, draw.Over) //将另外一张图片信息存入jpg
 
-					fSave, err := os.Create("." + r.URL.Path + "7.png")
+					fSave, err := os.Create("7.png")
 					if err != nil {
 						log.Println( "err:", err)
 						log.Printf("Error3")
@@ -158,8 +158,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					bot.PushMessage(
 						groupID, 
 						linebot.NewImageMessage(
-							"https://didacat123.herokuapp.com/callback/7.png",
-							"https://didacat123.herokuapp.com/callback/7.png"	,	
+							"7.png",
+							"7.png"	,	
 							)		,	
 					).Do(); 
 				}
