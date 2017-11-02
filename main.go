@@ -125,6 +125,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func printSlice(s []int) {
+func printSlice(s []string) {
 	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
 }
