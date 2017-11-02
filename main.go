@@ -15,6 +15,7 @@ var bot *linebot.Client
 var port =""
 var addr =""
 var isGameStart bool = false
+var s []int
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -72,7 +73,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						UserName := message.Text[6:len(message.Text)]
 						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲")).Do()
-						var s []int
+						
 						printSlice(s)
 					
 						// append works on nil slices.
@@ -124,7 +125,4 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-}
-func printSlice(s []int) {
-	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
 }
