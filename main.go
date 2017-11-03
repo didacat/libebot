@@ -18,6 +18,7 @@ var bot *linebot.Client
 var port =""
 var addr =""
 var isGameStart bool = false
+var isDice bool = false
 var UserNameSlice []string	//玩家名稱
 var UserIDSlice []string	//玩家ID
 var UserAnsMap = make(map[string]string) //玩家ID跟骰子數值的MAP表
@@ -74,6 +75,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if (groupID == "" && UserIDSlice[WhoRound] == userID){
 					log.Print(userID + "講話啦~~" + message.Text)
 					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
+					//如果玩家只剩一顆的話 會補發圖片給他
+					if(len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
+						bot.PushMessage(
+							UserIDSlice[WhoRound], 
+							linebot.NewImageMessage(
+								"https://jenny-web.herokuapp.com/dice/merge/"+ UserAnsMap[userID] +"/0/564531635164",
+								"https://jenny-web.herokuapp.com/dice/merge/"+ UserAnsMap[userID] +"/0/564531635164",
+								)		,	
+						).Do();
+					}
+
 					NextUserRound := 0
 					UserAnser := ""
 					if(WhoRound + 1 >= len(UserIDSlice)){
@@ -186,11 +198,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}else{
 						WhoRound += 1
 					}
+					//
 					
-					//刪除 MAP 表
-					// for _, value := range UserIDSlice {
-					// 	delete(UserAnsMap,value)
-					// }
 					
 					for i, value := range UserIDSlice {
 						rand.Seed(time.Now().UnixNano())  						
@@ -207,13 +216,18 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						log.Print(value)
 						//如果玩家還有骰子的話 發送新的骰子圖片給玩家
 						if(len(UserAnsMap[value]) > 0){
-							bot.PushMessage(
-								value, 
-								linebot.NewImageMessage(
-									"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
-									"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
-									)		,	
-							).Do();
+							//如果玩家只剩下一顆骰子的話 先問玩家要選甚麼類型 再發送圖片
+							if(len(UserAnsMap[value]) == 1){
+
+							}else{
+								bot.PushMessage(
+									value, 
+									linebot.NewImageMessage(
+										"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+										"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+										)		,	
+								).Do();
+							}							
 						}else{
 							//骰子沒了 對失敗者發送失敗照片 贏家發送贏照
 							for _, value := range UserIDSlice {
@@ -240,17 +254,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[i]+"被清光光了~")).Do()
 							//清空所有資料 重新開始一局
 							log.Print("END DiceGame")
-							UserNameSlice = UserNameSlice[:0]
-							UserIDSlice = UserIDSlice[:0]
-							bot.PushMessage(groupID, linebot.NewTextMessage("GAME OVER!")).Do()
+							// UserNameSlice = UserNameSlice[:0]
+							// UserIDSlice = UserIDSlice[:0]
+							bot.PushMessage(m_groupID, linebot.NewTextMessage("GAME OVER!")).Do()
 							isGameStart = false
 							WhoRound = 0
 						}
 							
 					}
 					//讓該回合有骰子的玩家 可以回答
-					if(len(UserAnsMap[userID]) > 0){
+					if(len(UserAnsMap[userID]) > 1){
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
+					}else if(len(UserAnsMap[userID]) == 1){
+						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你只剩下一顆骰子了\n請先決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑\n盲骰後會讓你看骰子的~" )).Do()
 					}else{
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你已經輸了~~" )).Do()
 					}
@@ -259,21 +275,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					// bot.PushMessage(groupID, linebot.NewTextMessage("現在是 " +  UserNameSlice[WhoRound] + "的回合")).Do()
 
 				}else{ //訊息來自 群組
-					if message.Text == "/dice" && isGameStart == false {
+					if message.Text == "/dice" && isDice == false {
 						log.Print("Start DiceGame")
 						bot.PushMessage(groupID, linebot.NewTextMessage("Start DiceGame!")).Do()
-						isGameStart = true
-					}else if message.Text == "/dicestop" && isGameStart == true {
+						isDice = true
+					}else if message.Text == "/dicestop" && isDice == true {
 						log.Print("Stop DiceGame")
 						UserNameSlice = UserNameSlice[:0]
 						UserIDSlice = UserIDSlice[:0]
 						bot.PushMessage(groupID, linebot.NewTextMessage("Stop DiceGame!")).Do()
+						isDice = false
 						isGameStart = false
 						WhoRound = 0
 					}
 					
 					if(len(message.Text) > 6){
-						if message.Text[0:6] == "/dice " && isGameStart == true {
+						if message.Text[0:6] == "/dice " && isDice == true {
 						//log.Print("user input" message.Text)
 							res, err := bot.GetProfile(userID).Do();
 							if err != nil {
@@ -307,6 +324,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 	
 					if message.Text == "/dicestart" {
+						isGameStart = true
 						log.Print("dicestart Receive")
 						m_groupID = groupID
 						for _, value := range UserIDSlice {
