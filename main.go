@@ -176,9 +176,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 
 					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound] + "選擇把  " + UserAnser +"拿掉\n換" + UserNameSlice[NextUserRound] + "的回合囉")).Do()
+					Msg := ""
 					for i, value := range UserIDSlice {
-						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[i] + "剩下 " + strconv.Itoa(len(UserAnsMap[value]))   + "顆骰子囉~")).Do()
+						Msg = Msg + UserNameSlice[i] + "剩下 " + strconv.Itoa(len(UserAnsMap[value]))   + "顆骰子囉~\n"
 					}
+					bot.PushMessage(m_groupID, linebot.NewTextMessage(Msg)).Do()
 					if(WhoRound + 1 >= len(UserIDSlice)){
 						WhoRound = 0
 					}else{
