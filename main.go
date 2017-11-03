@@ -88,6 +88,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						for _, value := range UserIDSlice {							
 							for _, DiceValue := range UserAnsMap[value] {
 								if(strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"4") || strings.EqualFold(string(DiceValue),"6")){
+									log.Print(string(DiceValue))
 									NewValue += string(DiceValue)
 								}
 							}
