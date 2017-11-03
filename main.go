@@ -260,13 +260,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								
 							}							
 						}else{
-							//判斷其他玩家是否也沒有骰子了							
-							for _, value := range UserIDSlice {
-								if(value != userID){
-									if(len(UserAnsMap[value]) == 0){
-										Tie =true
-									}
-								}
+							//判斷其他玩家是否也沒有骰子了		
+							iCount := 0					
+							for _, value := range UserIDSlice {								
+								if(len(UserAnsMap[value]) == 0){
+									iCount++
+								}								
+							}
+							if (iCount ==2){
+								Tie = true
 							}
 							if (Tie){				
 								for _, value := range UserIDSlice {
