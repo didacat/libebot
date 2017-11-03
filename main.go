@@ -78,7 +78,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						UserName := message.Text[6:len(message.Text)]
 						UserNameSlice= append(UserNameSlice, UserName)
-						UserIDSlice = append(UserNameSlice, userID)
+						UserIDSlice = append(UserIDSlice, userID)
 						TotalUser := ""
 						for _, value := range UserNameSlice {
 							TotalUser += value
@@ -117,6 +117,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					  }
 					  log.Print("NumerString = " + NumerString)
 					for _, value := range UserIDSlice {
+						log.Print(value)
 						bot.PushMessage(
 							value, 
 							linebot.NewImageMessage(
