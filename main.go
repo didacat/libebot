@@ -29,7 +29,7 @@ var NextUserRound = 0
 var PreUserRound = 0
 var m_groupID =""
 
-var diceCount = 6
+var diceCount = 10
 
 type DiceValue struct {	
 	Values []string
@@ -212,7 +212,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						SliceValue := make([]int, len(UserAnsMap[value]))
 						NumerString := ""
 						for _, element := range SliceValue {
-							element = rand.Intn(6)  
+							element = rand.Intn(diceCount)  
 							element = element + 1 
 							NumerString = NumerString + strconv.Itoa(element)  
 						}
@@ -328,7 +328,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							UserName := message.Text[6:len(message.Text)]
 							UserNameSlice= append(UserNameSlice, UserName)	//紀錄玩家輸入的名稱 之後推撥會顯示玩家名稱的回合
 							UserIDSlice = append(UserIDSlice, userID)	//紀錄玩家的ID 便於後續發送圖片
-							UserDiceCount = append(UserDiceCount, 6)	//初始都給玩家 6顆骰子
+							UserDiceCount = append(UserDiceCount, diceCount)	//初始都給玩家 6顆骰子
 							UserCanSpeakSlice = append(UserCanSpeakSlice, false) //玩家有無回答的權限
 							TotalUser := ""
 							for _, value := range UserNameSlice {
@@ -358,10 +358,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						m_groupID = groupID
 						for _, value := range UserIDSlice {
 							rand.Seed(time.Now().UnixNano())  
-							arrValue := [...]int{1,2,3,4,5,6}
+							SliceValue := make([]int, diceCount)
+							// arrValue := [...]int{1,2,3,4,5,6}
 							NumerString := ""
-							for _, element := range arrValue {
-								element = rand.Intn(6)  
+							for _, element := range SliceValue {
+								element = rand.Intn(diceCount)  
 								element = element + 1 
 								NumerString = NumerString + strconv.Itoa(element)  
 							}
