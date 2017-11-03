@@ -187,7 +187,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					// 	delete(UserAnsMap,value)
 					// }
 					
-					for _, value := range UserIDSlice {
+					for i, value := range UserIDSlice {
 						rand.Seed(time.Now().UnixNano())  						
 						SliceValue := make([]int, len(UserAnsMap[value]))
 						NumerString := ""
@@ -200,14 +200,29 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						log.Print("NumerString = " + NumerString)
 						log.Print(UserAnsMap)
 						log.Print(value)
-						//發送給玩家圖片
-						bot.PushMessage(
-							value, 
-							linebot.NewImageMessage(
-								"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
-								"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
-								)		,	
-						).Do(); 
+						//如果玩家還有骰子的話 發送新的骰子圖片給玩家
+						if(len(UserAnsMap[value]) > 0){
+							bot.PushMessage(
+								value, 
+								linebot.NewImageMessage(
+									"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+									"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+									)		,	
+							).Do();
+						}else{
+							//骰子沒了 發送失敗照片
+							bot.PushMessage(
+								value, 
+								linebot.NewImageMessage(
+									"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
+									"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
+									)		,	
+							).Do();
+
+							//發送給群組 告知有人輸了 結束遊戲
+							bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[i]+"被清光光了~")).Do()
+						}
+							
 					}
 					//讓第一位玩家 可以回答
 					bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
