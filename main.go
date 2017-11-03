@@ -227,6 +227,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							UserIDSlice = UserIDSlice[:0]
 							bot.PushMessage(groupID, linebot.NewTextMessage("GAME OVER!")).Do()
 							isGameStart = false
+							WhoRound = 0
 						}
 							
 					}
@@ -251,6 +252,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						UserIDSlice = UserIDSlice[:0]
 						bot.PushMessage(groupID, linebot.NewTextMessage("Stop DiceGame!")).Do()
 						isGameStart = false
+						WhoRound = 0
 					}
 					
 					if(len(message.Text) > 6){
