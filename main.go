@@ -77,7 +77,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				//如果訊息來自 有發言權的 使用者
 				if (groupID == "" && UserIDSlice[WhoRound] == userID){
 					log.Print(userID + "講話啦~~" + message.Text)
-					log.Print("WhoRound == " + strconv.Itoa(WhoRound))					
+					log.Print("WhoRound == " + strconv.Itoa(WhoRound))	
+					//如果是上一輪玩家剩一顆骰子 補發照片給她
+					if(UserIDSlice[WhoRound] == userID && len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
+						bot.PushMessage(
+							UserIDSlice[WhoRound], 
+							linebot.NewImageMessage(
+								"https://jenny-web.herokuapp.com/dice/merge/"+ UserAnsMap[UserIDSlice[WhoRound]] +"/0/564531635164",
+								"https://jenny-web.herokuapp.com/dice/merge/"+ UserAnsMap[UserIDSlice[WhoRound]] +"/0/564531635164",
+								)		,	
+						).Do();
+					}
+
+
 					UserAnser := ""
 					if(WhoRound + 1 >= len(UserIDSlice)){
 						NextUserRound = 0
