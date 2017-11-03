@@ -66,12 +66,23 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(userID + "講話啦~~")
 					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
 					NextUserRound := 0
+					UserAnser := ""
 					if(WhoRound + 1 >= len(UserIDSlice)){
 						NextUserRound = 0
 					}else{
 						NextUserRound += 1
 					}
-					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserIDSlice[WhoRound] + "講話啦~~  " + message.Text +"\n換" + UserNameSlice[NextUserRound] + "的回合囉")).Do()
+					
+					if(message.Text =="1"){
+						UserAnser = "單雙"
+					}else if(message.Text =="2"){
+						UserAnser = "大小"
+					}else if(message.Text =="3"){
+						UserAnser = "紅黑"
+					}
+
+
+					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound] + "選擇把  " + UserAnser +"拿掉\n換" + UserNameSlice[NextUserRound] + "的回合囉")).Do()
 					if(WhoRound + 1 >= len(UserIDSlice)){
 						WhoRound = 0
 					}else{
