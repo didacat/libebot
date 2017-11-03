@@ -212,7 +212,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						SliceValue := make([]int, len(UserAnsMap[value]))
 						NumerString := ""
 						for _, element := range SliceValue {
-							element = rand.Intn(diceCount)  
+							element = rand.Intn(6)  
 							element = element + 1 
 							NumerString = NumerString + strconv.Itoa(element)  
 						}
@@ -362,7 +362,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							// arrValue := [...]int{1,2,3,4,5,6}
 							NumerString := ""
 							for _, element := range SliceValue {
-								element = rand.Intn(diceCount)  
+								element = rand.Intn(6)  
 								element = element + 1 
 								NumerString = NumerString + strconv.Itoa(element)  
 							}
