@@ -72,7 +72,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}*/
 				//如果訊息來自 有發言權的 使用者
 				if (groupID == "" && UserIDSlice[WhoRound] == userID){
-					log.Print(userID + "講話啦~~")
+					log.Print(userID + "講話啦~~" + message.Text)
 					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
 					NextUserRound := 0
 					UserAnser := ""
@@ -83,9 +83,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 					
 					if(message.Text =="1"){
-						UserAnser = "單"
-						NewValue := ""
-						for _, value := range UserIDSlice {							
+						UserAnser = "單"						
+						for _, value := range UserIDSlice {
+							NewValue := ""							
 							for _, DiceValue := range UserAnsMap[value] {
 								if(strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"4") || strings.EqualFold(string(DiceValue),"6")){
 									// log.Print(string(DiceValue))
@@ -98,9 +98,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							
 						}
 					}else if(message.Text =="2"){
-						UserAnser = "雙"
-						NewValue := ""
-						for _, value := range UserIDSlice {							
+						UserAnser = "雙"						
+						for _, value := range UserIDSlice {		
+							NewValue := ""					
 							for _, DiceValue := range UserAnsMap[value] {
 								if(strings.EqualFold(string(DiceValue),"1") || strings.EqualFold(string(DiceValue),"3") || strings.EqualFold(string(DiceValue),"5")){
 									// log.Print(string(DiceValue))
@@ -114,8 +114,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}else if(message.Text =="3"){
 						UserAnser = "大"
-						NewValue := ""
-						for _, value := range UserIDSlice {							
+						for _, value := range UserIDSlice {		
+							NewValue := ""							
 							for _, DiceValue := range UserAnsMap[value] {
 								if(strings.EqualFold(string(DiceValue),"1") || strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"3")){
 									// log.Print(string(DiceValue))
@@ -129,8 +129,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}else if(message.Text =="4"){
 						UserAnser = "小"
-						NewValue := ""
-						for _, value := range UserIDSlice {							
+						for _, value := range UserIDSlice {			
+							NewValue := ""						
 							for _, DiceValue := range UserAnsMap[value] {
 								if(strings.EqualFold(string(DiceValue),"4") || strings.EqualFold(string(DiceValue),"5") || strings.EqualFold(string(DiceValue),"6")){
 									// log.Print(string(DiceValue))
@@ -144,9 +144,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}else if(message.Text =="5"){
 						UserAnser = "紅"
-						NewValue := ""
-						for _, value := range UserIDSlice {							
-							for _, DiceValue := range UserAnsMap[value] {
+						for _, value := range UserIDSlice {	
+							NewValue := ""							
+							for _, DiceValue := range UserAnsMap[value] {								
 								if(strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"3") || strings.EqualFold(string(DiceValue),"5") || strings.EqualFold(string(DiceValue),"6")){
 									// log.Print(string(DiceValue))
 									NewValue += string(DiceValue)
@@ -159,9 +159,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}else if(message.Text =="6"){
 						UserAnser = "黑"
-						NewValue := ""
-						for _, value := range UserIDSlice {							
-							for _, DiceValue := range UserAnsMap[value] {
+						for _, value := range UserIDSlice {		
+							NewValue := ""						
+							for _, DiceValue := range UserAnsMap[value] {								
 								if(strings.EqualFold(string(DiceValue),"1") || strings.EqualFold(string(DiceValue),"4") ){
 									// log.Print(string(DiceValue))
 									NewValue += string(DiceValue)
