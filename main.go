@@ -95,7 +95,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							// 		NewValue += DiceValue
 							// 	}
 							// }
+							log.Print(NewValue)
 							UserAnsMap[value] = NewValue
+							log.Print(UserAnsMap[value])
 							
 						}
 					}else if(message.Text =="2"){
