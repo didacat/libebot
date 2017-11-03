@@ -245,6 +245,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										SomeBodyOut =true
 									}
 								}
+								//如果沒有人出局的話 就繼續發送圖片
 								if(SomeBodyOut == false){
 									bot.PushMessage(
 										value, 
@@ -292,13 +293,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 							
 					}
-					//讓下一回合有骰子的玩家 可以回答
-					if(len(UserAnsMap[UserIDSlice[WhoRound]]) > 1){
-						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
-					}else if(len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
-						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你只剩下一顆骰子了\n請先決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑\n盲骰後會讓你看骰子的~" )).Do()
-					}else{
-						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你已經輸了~~" )).Do()
+					SomeBodyOut := false
+					for _, value := range UserIDSlice {
+						if(len(UserAnsMap[value]) == 0){
+							SomeBodyOut =true
+						}
+					}
+					//如果沒有人出局的話 就繼續發送訊息給下一位
+					if(SomeBodyOut == false){
+						//讓下一回合有骰子的玩家 可以回答
+						if(len(UserAnsMap[UserIDSlice[WhoRound]]) > 1){
+							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
+						}else if(len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
+							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你只剩下一顆骰子了\n請先決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑\n盲骰後會讓你看骰子的~" )).Do()
+						}else{
+							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你已經輸了~~" )).Do()
+						}
 					}
 
 				}else{ //訊息來自 群組
