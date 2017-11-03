@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-
+	"math/rand"
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
@@ -99,6 +99,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				if message.Text == "/dicestart" {
 					log.Print("dicestart Receive")
+					// arrValue := [...]int{1,2,3,4,5,6}
+					// for index, element := range arrValue {
+					// 	element = rand.New(rand.int(6))
+					//   }
+					r := rand.New(rand.NewSource(99))
+					fmt.Println(r)
 					for _, value := range UserIDSlice {
 						bot.PushMessage(
 							value, 
