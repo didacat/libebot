@@ -103,20 +103,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				if message.Text == "/dicestart" {
 					log.Print("dicestart Receive")
-					rand.Seed(time.Now().UnixNano())  
-					for i := 0; i < 10; i++ {  
-						x := rand.Intn(100)  
-						fmt.Println(x)  
-					}
-					arrValue := [...]int{1,2,3,4,5,6}
-					NumerString := ""
-					for _, element := range arrValue {
-						element = rand.Intn(6)  
-						element = element + 1 
-						NumerString = NumerString + strconv.Itoa(element)  
-					  }
-					  log.Print("NumerString = " + NumerString)
+					
 					for _, value := range UserIDSlice {
+
+						rand.Seed(time.Now().UnixNano())  
+						arrValue := [...]int{1,2,3,4,5,6}
+						NumerString := ""
+						for _, element := range arrValue {
+							element = rand.Intn(6)  
+							element = element + 1 
+							NumerString = NumerString + strconv.Itoa(element)  
+						  }
+						log.Print("NumerString = " + NumerString)
+
 						log.Print(value)
 						bot.PushMessage(
 							value, 
