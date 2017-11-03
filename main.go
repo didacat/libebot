@@ -16,6 +16,7 @@ var port =""
 var addr =""
 var isGameStart bool = false
 var UserNameSlice []string
+var UserIDSlice []string
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -65,7 +66,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				
 				if(len(message.Text) > 6){
-					if message.Text[0:6] == "/dice " && isGameStart == true {				
+					if message.Text[0:6] == "/dice " && isGameStart == true {
 					//log.Print("user input" message.Text)
 						res, err := bot.GetProfile(userID).Do();
 						if err != nil {
@@ -73,21 +74,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						UserName := message.Text[6:len(message.Text)]
 						UserNameSlice= append(UserNameSlice, UserName)
+						UserIDSlice = append(UserNameSlice, userID)
 						TotalUser := ""
 						for _, value := range UserNameSlice {
 							TotalUser += value
 						}
 
 						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲\n" + "目前玩家有 : " + TotalUser + " , ")).Do()
-						
-						
-					
 						log.Print(res.DisplayName)
-						log.Print(UserName)
-
-
-						// log.Print(res.PicutureURL)
-						// log.Print(res.StatusMessage)						
+						log.Print(UserName)					
 					}
 				}
 
@@ -102,15 +97,18 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					).Do(); 
 				}
 
-				if message.Text == "/picall" {
-					log.Print("Pic Receive")
-					bot.PushMessage(
-						groupID, 
-						linebot.NewImageMessage(
-							"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
-							"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
-							)		,	
-					).Do(); 
+				if message.Text == "/dicestart" {
+					log.Print("dicestart Receive")
+					for _, value := range UserIDSlice {
+						bot.PushMessage(
+							value, 
+							linebot.NewImageMessage(
+								"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
+								"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
+								)		,	
+						).Do(); 
+					}
+					
 				}
 				log.Print(event.ReplyToken)
 				log.Print(message.Text)
