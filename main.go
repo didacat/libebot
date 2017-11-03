@@ -25,6 +25,8 @@ var UserAnsMap = make(map[string]string) //玩家ID跟骰子數值的MAP表
 var UserCanSpeakSlice []bool //玩家是否能說話
 var UserDiceCount []int //玩家的骰子數量
 var WhoRound int = 0	//輪到誰的INDEX
+var NextUserRound = 0
+var PreUserRound = 0
 var m_groupID =""
 
 var test = 6
@@ -71,22 +73,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
 					log.Print(err)
 				}*/
+				
 				//如果訊息來自 有發言權的 使用者
 				if (groupID == "" && UserIDSlice[WhoRound] == userID){
 					log.Print(userID + "講話啦~~" + message.Text)
-					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
-					//如果玩家只剩一顆的話 會補發圖片給他
-					if(len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
-						bot.PushMessage(
-							UserIDSlice[WhoRound], 
-							linebot.NewImageMessage(
-								"https://jenny-web.herokuapp.com/dice/merge/"+ UserAnsMap[userID] +"/0/564531635164",
-								"https://jenny-web.herokuapp.com/dice/merge/"+ UserAnsMap[userID] +"/0/564531635164",
-								)		,	
-						).Do();
-					}
-
-					NextUserRound := 0
+					log.Print("WhoRound == " + strconv.Itoa(WhoRound))					
 					UserAnser := ""
 					if(WhoRound + 1 >= len(UserIDSlice)){
 						NextUserRound = 0
@@ -193,6 +184,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						Msg = Msg + UserNameSlice[i] + "剩下 " + strconv.Itoa(len(UserAnsMap[value]))   + "顆骰子囉~\n"
 					}
 					bot.PushMessage(m_groupID, linebot.NewTextMessage(Msg)).Do()
+					PreUserRound = WhoRound
 					if(WhoRound + 1 >= len(UserIDSlice)){
 						WhoRound = 0
 					}else{
@@ -216,9 +208,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						log.Print(value)
 						//如果玩家還有骰子的話 發送新的骰子圖片給玩家
 						if(len(UserAnsMap[value]) > 0){
-							//如果玩家只剩下一顆骰子的話 先問玩家要選甚麼類型 再發送圖片
+							//如果玩家只剩下一顆骰子的話 							
 							if(len(UserAnsMap[value]) == 1){
-
+								//若玩家有發言權 先問玩家要選甚麼類型 再發送圖片
+								if(UserIDSlice[WhoRound] == value){
+									
+								}else{
+									//若玩家沒有發言權 直接送圖片
+									bot.PushMessage(
+										value, 
+										linebot.NewImageMessage(
+											"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+											"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+											)		,	
+									).Do();
+								}
+								
 							}else{
 								bot.PushMessage(
 									value, 
@@ -262,17 +267,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 							
 					}
-					//讓該回合有骰子的玩家 可以回答
-					if(len(UserAnsMap[userID]) > 1){
+					//讓下一回合有骰子的玩家 可以回答
+					if(len(UserAnsMap[UserIDSlice[WhoRound]]) > 1){
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
-					}else if(len(UserAnsMap[userID]) == 1){
+					}else if(len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你只剩下一顆骰子了\n請先決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑\n盲骰後會讓你看骰子的~" )).Do()
 					}else{
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你已經輸了~~" )).Do()
 					}
-
-					//發給群組 現在是誰的回合
-					// bot.PushMessage(groupID, linebot.NewTextMessage("現在是 " +  UserNameSlice[WhoRound] + "的回合")).Do()
 
 				}else{ //訊息來自 群組
 					if message.Text == "/dice" && isDice == false {
