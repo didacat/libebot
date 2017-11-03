@@ -239,13 +239,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								}
 								
 							}else{
-								bot.PushMessage(
-									value, 
-									linebot.NewImageMessage(
-										"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
-										"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
-										)		,	
-								).Do();
+								SomeBodyOut := false
+								for _, value := range UserIDSlice {
+									if(len(UserAnsMap[value]) == 0){
+										SomeBodyOut =true
+									}
+								}
+								if(SomeBodyOut == false){
+									bot.PushMessage(
+										value, 
+										linebot.NewImageMessage(
+											"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+											"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+											)		,	
+									).Do();
+								}
+								
 							}							
 						}else{
 							//骰子沒了 對失敗者發送失敗照片 贏家發送贏照
