@@ -63,6 +63,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					isGameStart = true
 				}else if message.Text == "/stopdice" && isGameStart == true {
 					log.Print("Stop DiceGame")
+					UserNameSlice = UserNameSlice[:0]
+					UserIDSlice = UserIDSlice[:0]
 					bot.PushMessage(groupID, linebot.NewTextMessage("Stop DiceGame!")).Do()
 					isGameStart = false
 				}
