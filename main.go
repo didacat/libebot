@@ -332,7 +332,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						if(len(UserAnsMap[UserIDSlice[WhoRound]]) > 1){
 							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
 						}else if(len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
-							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你只剩下一顆骰子了\n請先決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑\n盲骰後會讓你看骰子的~" )).Do()
+							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你只剩下一顆骰子\n已經幫您重新搖骰了\n但先不讓你看\n請先決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑\n盲骰後會讓你看骰子的~" )).Do()
 						}else{
 							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你已經輸了~~" )).Do()
 						}
