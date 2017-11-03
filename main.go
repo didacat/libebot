@@ -23,6 +23,8 @@ var UserAnsMap = make(map[string]string)
 var UserCanSpeakSlice []bool
 var WhoRound int = 0
 var m_groupID =""
+
+var test = 6
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -75,10 +77,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					
 					if(message.Text =="1"){
 						UserAnser = "單雙"
+						test = test - 1
 					}else if(message.Text =="2"){
 						UserAnser = "大小"
+						test = test - 2
 					}else if(message.Text =="3"){
 						UserAnser = "紅黑"
+						test = test - 3
 					}
 
 
@@ -88,12 +93,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}else{
 						WhoRound += 1
 					}
-
+					
 					for _, value := range UserIDSlice {
-						rand.Seed(time.Now().UnixNano())  
-						arrValue := [...]int{1,2,3,4,5,6}
+						rand.Seed(time.Now().UnixNano())  						
+						SliceValue := make([]int, test)
 						NumerString := ""
-						for _, element := range arrValue {
+						for _, element := range SliceValue {
 							element = rand.Intn(6)  
 							element = element + 1 
 							NumerString = NumerString + strconv.Itoa(element)  
