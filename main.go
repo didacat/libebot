@@ -210,14 +210,26 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									)		,	
 							).Do();
 						}else{
-							//骰子沒了 發送失敗照片
-							bot.PushMessage(
-								value, 
-								linebot.NewImageMessage(
-									"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
-									"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
-									)		,	
-							).Do();
+							//骰子沒了 對失敗者發送失敗照片 贏家發送贏照
+							for _, value := range UserIDSlice {
+								if(len(UserAnsMap[value]) > 0){
+									bot.PushMessage(
+										value, 
+										linebot.NewImageMessage(
+											"https://www.jiuwa.net/tuku/20170627/wndhdTKu.jpg",
+											"https://www.jiuwa.net/tuku/20170627/wndhdTKu.jpg",
+											)		,	
+									).Do();
+								}else{
+									bot.PushMessage(
+										value, 
+										linebot.NewImageMessage(
+											"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
+											"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
+											)		,	
+									).Do();
+								}
+							}						
 
 							//發送給群組 告知有人輸了 結束遊戲
 							bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[i]+"被清光光了~")).Do()
