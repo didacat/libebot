@@ -267,13 +267,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								}
 							}
 							if (Tie){				
+								for _, value := range UserIDSlice {
 									bot.PushMessage(
 										value, 
 										linebot.NewImageMessage(
 											"https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=1ccf6bdd9a52982205333ec5eff11cf6/d000baa1cd11728b1dfcdb38c2fcc3cec2fd2cd2.jpg",
 											"https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=1ccf6bdd9a52982205333ec5eff11cf6/d000baa1cd11728b1dfcdb38c2fcc3cec2fd2cd2.jpg",
 											)		,	
-									).Do();								
+									).Do();	
+								}							
 							}else{
 								//骰子沒了 對失敗者發送失敗照片 贏家發送贏照
 								for _, value := range UserIDSlice {
