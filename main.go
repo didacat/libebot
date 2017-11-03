@@ -61,10 +61,44 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK2!")).Do(); err != nil {
 					log.Print(err)
 				}*/
-				//如果訊息來自 使用者
-				if (groupID == ""){
+				//如果訊息來自 有發言權的 使用者
+				if (groupID == "" && UserIDSlice[WhoRound] == userID){
 					log.Print(userID + "講話啦~~")
-					bot.PushMessage(m_groupID, linebot.NewTextMessage(userID + "講話啦~~  " + message.Text)).Do()
+					
+					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserIDSlice[WhoRound] + "講話啦~~  " + message.Text +"\n換" + UserNameSlice[WhoRound + 1] + "的回合囉")).Do()
+					if(WhoRound + 1 >= len(UserIDSlice)){
+						WhoRound = 0
+					}else{
+						WhoRound += 1
+					}
+
+					for _, value := range UserIDSlice {
+						rand.Seed(time.Now().UnixNano())  
+						arrValue := [...]int{1,2,3,4,5,6}
+						NumerString := ""
+						for _, element := range arrValue {
+							element = rand.Intn(6)  
+							element = element + 1 
+							NumerString = NumerString + strconv.Itoa(element)  
+						}
+						UserAnsMap[NumerString] = value
+						log.Print("NumerString = " + NumerString)
+						log.Print(UserAnsMap)
+						log.Print(value)
+						//發送給玩家圖片
+						bot.PushMessage(
+							value, 
+							linebot.NewImageMessage(
+								"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+								"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+								)		,	
+						).Do(); 
+					}
+					//讓第一位玩家 可以回答
+					bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單雙 \n 2)大小 \n 3)紅黑" )).Do()
+					//發給群組 現在是誰的回合
+					// bot.PushMessage(groupID, linebot.NewTextMessage("現在是 " +  UserNameSlice[WhoRound] + "的回合")).Do()
+
 				}else{ //訊息來自 群組
 					if message.Text == "/dice" && isGameStart == false {
 						log.Print("Start DiceGame")
