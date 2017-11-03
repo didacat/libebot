@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"math/rand"
+	"strconv"  
+	"time"  
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
@@ -99,18 +101,25 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				if message.Text == "/dicestart" {
 					log.Print("dicestart Receive")
-					// arrValue := [...]int{1,2,3,4,5,6}
-					// for index, element := range arrValue {
-					// 	element = rand.New(rand.int(6))
-					//   }
-					r := rand.New(rand.NewSource(99))
-					fmt.Println(r)
+					rand.Seed(time.Now().UnixNano())  
+					for i := 0; i < 10; i++ {  
+						x := rand.Intn(100)  
+						fmt.Println(x)  
+					}
+					arrValue := [...]int{1,2,3,4,5,6}
+					NumerString := ""
+					for _, element := range arrValue {
+						element = rand.Intn(6)  
+						element = element + 1 
+						NumerString = NumerString + strconv.Itoa(element)  
+					  }
+					  log.Print("NumerString = " + NumerString)
 					for _, value := range UserIDSlice {
 						bot.PushMessage(
 							value, 
 							linebot.NewImageMessage(
-								"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
-								"https://jenny-web.herokuapp.com/dice/merge/152221/0/564531635164",
+								"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
+								"https://jenny-web.herokuapp.com/dice/merge/"+ NumerString +"/0/564531635164",
 								)		,	
 						).Do(); 
 					}
