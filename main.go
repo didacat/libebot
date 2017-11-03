@@ -85,16 +85,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if(message.Text =="1"){
 						UserAnser = "單"
 						NewValue := ""
-						for _, value := range UserIDSlice {
-							
-							NewValue = strings.TrimRight(UserAnsMap[value],"1")
-							NewValue = strings.TrimRight(UserAnsMap[value],"3")
-							NewValue = strings.TrimRight(UserAnsMap[value],"5")
-							// for _, DiceValue := range UserAnsMap[value] {
-							// 	if(strings.EqualFold(DiceValue,"2") || strings.EqualFold(DiceValue,"4") || strings.EqualFold(DiceValue,"6")){
-							// 		NewValue += DiceValue
-							// 	}
-							// }
+						for _, value := range UserIDSlice {							
+							for _, DiceValue := range UserAnsMap[value] {
+								if(strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"4") || strings.EqualFold(string(DiceValue),"6")){
+									NewValue += string(DiceValue)
+								}
+							}
 							log.Print(NewValue)
 							UserAnsMap[value] = NewValue
 							log.Print(UserAnsMap[value])
