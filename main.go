@@ -88,7 +88,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						for _, value := range UserIDSlice {							
 							for _, DiceValue := range UserAnsMap[value] {
 								if(strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"4") || strings.EqualFold(string(DiceValue),"6")){
-									log.Print(string(DiceValue))
+									// log.Print(string(DiceValue))
 									NewValue += string(DiceValue)
 								}
 							}
@@ -99,19 +99,79 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}else if(message.Text =="2"){
 						UserAnser = "雙"
-						test = test - 2
+						NewValue := ""
+						for _, value := range UserIDSlice {							
+							for _, DiceValue := range UserAnsMap[value] {
+								if(strings.EqualFold(string(DiceValue),"1") || strings.EqualFold(string(DiceValue),"3") || strings.EqualFold(string(DiceValue),"5")){
+									// log.Print(string(DiceValue))
+									NewValue += string(DiceValue)
+								}
+							}
+							log.Print(NewValue)
+							UserAnsMap[value] = NewValue
+							log.Print(UserAnsMap[value])
+							
+						}
 					}else if(message.Text =="3"){
 						UserAnser = "大"
-						test = test - 3
+						NewValue := ""
+						for _, value := range UserIDSlice {							
+							for _, DiceValue := range UserAnsMap[value] {
+								if(strings.EqualFold(string(DiceValue),"1") || strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"3")){
+									// log.Print(string(DiceValue))
+									NewValue += string(DiceValue)
+								}
+							}
+							log.Print(NewValue)
+							UserAnsMap[value] = NewValue
+							log.Print(UserAnsMap[value])
+							
+						}
 					}else if(message.Text =="4"){
 						UserAnser = "小"
-						test = test - 2
+						NewValue := ""
+						for _, value := range UserIDSlice {							
+							for _, DiceValue := range UserAnsMap[value] {
+								if(strings.EqualFold(string(DiceValue),"4") || strings.EqualFold(string(DiceValue),"5") || strings.EqualFold(string(DiceValue),"6")){
+									// log.Print(string(DiceValue))
+									NewValue += string(DiceValue)
+								}
+							}
+							log.Print(NewValue)
+							UserAnsMap[value] = NewValue
+							log.Print(UserAnsMap[value])
+							
+						}
 					}else if(message.Text =="5"){
 						UserAnser = "紅"
-						test = test - 3
+						NewValue := ""
+						for _, value := range UserIDSlice {							
+							for _, DiceValue := range UserAnsMap[value] {
+								if(strings.EqualFold(string(DiceValue),"2") || strings.EqualFold(string(DiceValue),"3") || strings.EqualFold(string(DiceValue),"5") || strings.EqualFold(string(DiceValue),"6")){
+									// log.Print(string(DiceValue))
+									NewValue += string(DiceValue)
+								}
+							}
+							log.Print(NewValue)
+							UserAnsMap[value] = NewValue
+							log.Print(UserAnsMap[value])
+							
+						}
 					}else if(message.Text =="6"){
 						UserAnser = "黑"
-						test = test - 2
+						NewValue := ""
+						for _, value := range UserIDSlice {							
+							for _, DiceValue := range UserAnsMap[value] {
+								if(strings.EqualFold(string(DiceValue),"1") || strings.EqualFold(string(DiceValue),"4") ){
+									// log.Print(string(DiceValue))
+									NewValue += string(DiceValue)
+								}
+							}
+							log.Print(NewValue)
+							UserAnsMap[value] = NewValue
+							log.Print(UserAnsMap[value])
+							
+						}
 					}
 
 
@@ -129,14 +189,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					
 					for _, value := range UserIDSlice {
 						rand.Seed(time.Now().UnixNano())  						
-						SliceValue := make([]int, test)
+						SliceValue := make([]int, len(UserAnsMap[value]))
 						NumerString := ""
 						for _, element := range SliceValue {
 							element = rand.Intn(6)  
 							element = element + 1 
 							NumerString = NumerString + strconv.Itoa(element)  
 						}
-						// UserAnsMap[NumerString] = value
+						UserAnsMap[value] = NumerString
 						log.Print("NumerString = " + NumerString)
 						log.Print(UserAnsMap)
 						log.Print(value)
