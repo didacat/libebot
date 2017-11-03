@@ -19,6 +19,7 @@ var addr =""
 var isGameStart bool = false
 var UserNameSlice []string
 var UserIDSlice []string
+var UserAnsMap = make(map[string]string)
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -81,10 +82,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						UserIDSlice = append(UserIDSlice, userID)
 						TotalUser := ""
 						for _, value := range UserNameSlice {
-							TotalUser += value
+							TotalUser += value + ","
 						}
 
-						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲\n" + "目前玩家有 : " + TotalUser + " , ")).Do()
+						bot.PushMessage(groupID, linebot.NewTextMessage(UserName + " 已加入遊戲\n" + "目前玩家有 : " + TotalUser )).Do()
 						log.Print(res.DisplayName)
 						log.Print(UserName)					
 					}
@@ -113,9 +114,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							element = rand.Intn(6)  
 							element = element + 1 
 							NumerString = NumerString + strconv.Itoa(element)  
-						  }
+						}
+						UserAnsMap[NumerString] = value
 						log.Print("NumerString = " + NumerString)
-
+						log.Print(UserAnsMap)
 						log.Print(value)
 						bot.PushMessage(
 							value, 
