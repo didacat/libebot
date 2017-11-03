@@ -79,6 +79,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(userID + "講話啦~~" + message.Text)
 					log.Print("WhoRound == " + strconv.Itoa(WhoRound))	
 					//如果是上一輪玩家剩一顆骰子 補發照片給她
+					log.Print("UserIDSlice.length == " + strconv.Itoa(len(UserIDSlice)))	
+					log.Print("UserAnsMap.length == " + strconv.Itoa(len(UserAnsMap)))	
 					if(UserIDSlice[WhoRound] == userID && len(UserAnsMap[UserIDSlice[WhoRound]]) == 1){
 						bot.PushMessage(
 							UserIDSlice[WhoRound], 
@@ -276,6 +278,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							bot.PushMessage(m_groupID, linebot.NewTextMessage("GAME OVER!")).Do()
 							isGameStart = false
 							WhoRound = 0
+							PreUserRound = 0
+							NextUserRound = 0
 						}
 							
 					}
@@ -301,6 +305,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						isDice = false
 						isGameStart = false
 						WhoRound = 0
+						PreUserRound = 0
+						NextUserRound = 0
 					}
 					
 					if(len(message.Text) > 6){
