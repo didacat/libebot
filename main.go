@@ -22,6 +22,7 @@ var UserIDSlice []string
 var UserAnsMap = make(map[string]string)
 var UserCanSpeakSlice []bool
 var WhoRound int = 0
+var m_groupID =""
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -63,6 +64,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				//如果訊息來自 使用者
 				if (groupID == ""){
 					log.Print(userID + "講話啦~~")
+					bot.PushMessage(m_groupID, linebot.NewTextMessage(userID + "講話啦~~  " + message.Text)).Do()
 				}else{ //訊息來自 群組
 					if message.Text == "/dice" && isGameStart == false {
 						log.Print("Start DiceGame")
@@ -111,7 +113,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	
 					if message.Text == "/dicestart" {
 						log.Print("dicestart Receive")
-						
+						m_groupID = groupID
 						for _, value := range UserIDSlice {
 							rand.Seed(time.Now().UnixNano())  
 							arrValue := [...]int{1,2,3,4,5,6}
