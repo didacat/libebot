@@ -65,7 +65,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if (groupID == "" && UserIDSlice[WhoRound] == userID){
 					log.Print(userID + "講話啦~~")
 					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
-					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserIDSlice[WhoRound] + "講話啦~~  " + message.Text +"\n換" + UserNameSlice[WhoRound + 1] + "的回合囉")).Do()
+					NextUserRound := 0
+					if(WhoRound + 1 >= len(UserIDSlice)){
+						NextUserRound = 0
+					}else{
+						NextUserRound += 1
+					}
+					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserIDSlice[WhoRound] + "講話啦~~  " + message.Text +"\n換" + UserNameSlice[NextUserRound] + "的回合囉")).Do()
 					if(WhoRound + 1 >= len(UserIDSlice)){
 						WhoRound = 0
 					}else{
