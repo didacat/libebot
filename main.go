@@ -206,7 +206,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 					//
 					
-					
+					Tie := false //是否平手
 					for i, value := range UserIDSlice {
 						rand.Seed(time.Now().UnixNano())  						
 						SliceValue := make([]int, len(UserAnsMap[value]))
@@ -258,40 +258,63 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								
 							}							
 						}else{
-							//骰子沒了 對失敗者發送失敗照片 贏家發送贏照
+							//判斷其他玩家是否也沒有骰子了							
 							for _, value := range UserIDSlice {
-								if(len(UserAnsMap[value]) > 0){
-									bot.PushMessage(
-										value, 
-										linebot.NewImageMessage(
-											"https://www.jiuwa.net/tuku/20170627/wndhdTKu.jpg",
-											"https://www.jiuwa.net/tuku/20170627/wndhdTKu.jpg",
-											)		,	
-									).Do();
-								}else{
-									bot.PushMessage(
-										value, 
-										linebot.NewImageMessage(
-											"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
-											"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
-											)		,	
-									).Do();
+								if(value != userID){
+									if(len(UserAnsMap[value]) == 0){
+										Tie =true
+									}
 								}
-							}						
-
-							//發送給群組 告知有人輸了 結束遊戲
-							bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[i]+"被清光光了~")).Do()
-							//清空所有資料 重新開始一局
-							log.Print("END DiceGame")
-							// UserNameSlice = UserNameSlice[:0]
-							// UserIDSlice = UserIDSlice[:0]
-							bot.PushMessage(m_groupID, linebot.NewTextMessage("GAME OVER!")).Do()
+							}
+							if (Tie){				
+									bot.PushMessage(
+										value, 
+										linebot.NewImageMessage(
+											"https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=1ccf6bdd9a52982205333ec5eff11cf6/d000baa1cd11728b1dfcdb38c2fcc3cec2fd2cd2.jpg",
+											"https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=1ccf6bdd9a52982205333ec5eff11cf6/d000baa1cd11728b1dfcdb38c2fcc3cec2fd2cd2.jpg",
+											)		,	
+									).Do();								
+							}else{
+								//骰子沒了 對失敗者發送失敗照片 贏家發送贏照
+								for _, value := range UserIDSlice {
+									if(len(UserAnsMap[value]) > 0){
+										bot.PushMessage(
+											value, 
+											linebot.NewImageMessage(
+												"https://www.jiuwa.net/tuku/20170627/wndhdTKu.jpg",
+												"https://www.jiuwa.net/tuku/20170627/wndhdTKu.jpg",
+												)		,	
+										).Do();
+									}else{
+										bot.PushMessage(
+											value, 
+											linebot.NewImageMessage(
+												"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
+												"https://i.ytimg.com/vi/V3fEhrP_9xc/maxresdefault.jpg",
+												)		,	
+										).Do();
+									}
+								}		
+							}
+											
+							if(Tie){
+								//發送給群組 告知大家平手 結束遊戲
+								bot.PushMessage(m_groupID, linebot.NewTextMessage("此局平手~~請大蝦重新來過!!")).Do()								
+								//清空所有資料 重新開始一局
+								log.Print("END DiceGame")
+								break
+							}else{
+								//發送給群組 告知有人輸了 結束遊戲
+								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[i]+"被清光光了~")).Do()
+								//清空所有資料 重新開始一局
+								log.Print("END DiceGame")
+							}
+							
 							isGameStart = false
 							WhoRound = 0
 							PreUserRound = 0
 							NextUserRound = 0
-						}
-							
+						}							
 					}
 					SomeBodyOut := false
 					for _, value := range UserIDSlice {
