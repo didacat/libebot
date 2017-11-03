@@ -221,11 +221,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 							//發送給群組 告知有人輸了 結束遊戲
 							bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[i]+"被清光光了~")).Do()
+							//清空所有資料 重新開始一局
+							log.Print("END DiceGame")
+							UserNameSlice = UserNameSlice[:0]
+							UserIDSlice = UserIDSlice[:0]
+							bot.PushMessage(groupID, linebot.NewTextMessage("GAME OVER!")).Do()
+							isGameStart = false
 						}
 							
 					}
-					//讓第一位玩家 可以回答
-					bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
+					//讓該回合有骰子的玩家 可以回答
+					if(len(UserAnsMap[userID]) > 0){
+						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑" )).Do()
+					}else{
+						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("你已經輸了~~" )).Do()
+					}
+
 					//發給群組 現在是誰的回合
 					// bot.PushMessage(groupID, linebot.NewTextMessage("現在是 " +  UserNameSlice[WhoRound] + "的回合")).Do()
 
