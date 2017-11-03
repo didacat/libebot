@@ -229,6 +229,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									
 								}else{
 									//若玩家沒有發言權 直接送圖片
+									bot.PushMessage(value, linebot.NewTextMessage("=====此局為新的一局牌面=====")).Do()	
 									bot.PushMessage(
 										value, 
 										linebot.NewImageMessage(
@@ -247,6 +248,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								}
 								//如果沒有人出局的話 就繼續發送圖片
 								if(SomeBodyOut == false){
+									bot.PushMessage(value, linebot.NewTextMessage("=====此局為新的一局牌面=====")).Do()	
 									bot.PushMessage(
 										value, 
 										linebot.NewImageMessage(
@@ -406,6 +408,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Print(UserAnsMap)
 							log.Print(value)
 							//發送給玩家圖片
+							bot.PushMessage(value, linebot.NewTextMessage("=====此局為新的一局牌面=====")).Do()	
 							bot.PushMessage(
 								value, 
 								linebot.NewImageMessage(
