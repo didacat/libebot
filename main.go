@@ -419,7 +419,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if SomeBodyOut == false {
 						//讓下一回合的玩家 開始吹
 						if len(UserAnsMap[UserIDSlice[WhoRound]]) > 1 {
-							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage(" 請決定你要喊的骰子點數及數量 ")).Do()
+							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage(" 請決定你要喊的骰子點數及數量 格式為 x/x (e.g.: 3/3)")).Do()
 						}
 					}
 				} else { //訊息來自 群組
@@ -598,7 +598,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						rand.Seed(time.Now().UnixNano())
 						WhoRound = rand.Intn(len(UserIDSlice))
 						//讓第一位玩家 可以回答
-						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子點數及數量")).Do()
+						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage(" 請決定你要喊的骰子點數及數量 格式為 x/x (e.g.: 3/3)")).Do()
 						//發給群組 現在是誰的回合
 						bot.PushMessage(groupID, linebot.NewTextMessage("現在是 "+UserNameSlice[WhoRound]+"的回合")).Do()
 					}
