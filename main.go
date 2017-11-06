@@ -368,11 +368,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print("UserSpeakDiceValue == " + strconv.Itoa(UserSpeakDiceValue))
 					//判斷 是否有符合規則
 					isBigger := false
-					if UserSpeakDiceCount > NeedDiceCount && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 {
+					if UserSpeakDiceCount > NeedDiceCount && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 && NeedDiceValue!=0{
 						NeedDiceCount = UserSpeakDiceCount
 						NeedDiceValue = UserSpeakDiceValue
 						isBigger = true
-					} else if UserSpeakDiceCount == NeedDiceCount && UserSpeakDiceValue > NeedDiceValue && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 {
+					} else if UserSpeakDiceCount == NeedDiceCount && UserSpeakDiceValue > NeedDiceValue && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 && NeedDiceValue!=0{{
 						NeedDiceCount = UserSpeakDiceCount
 						NeedDiceValue = UserSpeakDiceValue
 						isBigger = true
@@ -419,7 +419,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if SomeBodyOut == false {
 						//讓下一回合的玩家 開始吹
 						if len(UserAnsMap[UserIDSlice[WhoRound]]) > 1 {
-							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage(" 請決定你要喊的骰子點數及數量 格式為 x/x (e.g.: 3/3)")).Do()
+							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage(" 請決定你要喊的骰子點數及數量 格式為 x/x (e.g.: 3/3) 或是輸入 抓")).Do()
 						}
 					}
 				} else { //訊息來自 群組
