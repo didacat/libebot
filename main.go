@@ -364,7 +364,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print("UserSpeakDiceValue == " + strconv.Itoa(UserSpeakDiceValue))
 					//判斷 是否有符合規則
 					isBigger := false
-					if UserSpeakDiceCount > NeedDiceCount {
+					if UserSpeakDiceCount > NeedDiceCount && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 {
 						NeedDiceCount = UserSpeakDiceCount
 						NeedDiceValue = UserSpeakDiceValue
 						isBigger = true
