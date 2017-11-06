@@ -357,11 +357,25 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					if len(message.Text) > 6 && !isGameStart {
 						if message.Text[0:6] == "/dice " && isDice == true {
+							//先判斷名稱是否重複 是的話幫玩家修改名字 或是 禁止玩家取同樣名稱
+							UserName := message.Text[6:len(message.Text)]
 							if len(UserIDSlice) >= 2 {
-								bot.PushMessage(groupID, linebot.NewTextMessage("人數已滿 , 請等下一輪")).Do()
-								break
+								UserDuplicate := false //玩家是否重複
+								//判斷玩家ID有無重複 有的話變成修改名稱
+								for i, value := range UserIDSlice {
+									if userID == value {
+										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+" 玩家名稱已修改成 "+UserName)).Do()
+										UserNameSlice[i] = UserName
+										UserDuplicate = true
+										// return
+									}
+								}
+								if !UserDuplicate {
+									bot.PushMessage(groupID, linebot.NewTextMessage("人數已滿 , 請等下一輪")).Do()
+								}
+								// break
 							} else {
-								UserName := message.Text[6:len(message.Text)]
+
 								UserDuplicate := false //玩家是否重複
 								//判斷玩家ID有無重複 有的話變成修改名稱
 								for i, value := range UserIDSlice {
