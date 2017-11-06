@@ -434,7 +434,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						).Do()
 					}
 
-					if message.Text == "/dicestart" {
+					if message.Text == "/dicestart" && !isGameStart {
 						isGameStart = true
 						log.Print("dicestart Receive")
 						m_groupID = groupID
