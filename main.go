@@ -347,7 +347,38 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 
 				} else if groupID == "" && UserIDSlice[WhoRound] == userID && isBlow { //如果訊息來自 有發言權的 使用者 並且在玩吹牛
+					log.Print(userID + "講話啦~~" + message.Text)
+					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
 
+					//拆解玩家回答的字串 16/3  == 16個3  或者是 抓
+
+					//如果符合規則 則換下一個玩家作答
+					if message.Text == "1" {
+						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 喊了  "+"x個x"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
+					} else if message.Text == "抓" {
+						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 選擇抓爆 "+UserNameSlice[PreUserRound])).Do()
+					} else {
+						bot.PushMessage(userID, linebot.NewTextMessage("請輸入 x/x 這種格式 或是輸入 抓")).Do()
+						return
+					}
+
+					PreUserRound = WhoRound
+					if WhoRound+1 >= len(UserIDSlice) {
+						WhoRound = 0
+					} else {
+						WhoRound += 1
+					}
+					//
+
+					SomeBodyOut := false //是否抓到
+
+					//如果沒有人出局的話 就繼續發送訊息給下一位
+					if SomeBodyOut == false {
+						//讓下一回合的玩家 開始吹
+						if len(UserAnsMap[UserIDSlice[WhoRound]]) > 1 {
+							bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage(" 請決定你要喊的骰子點數及數量 ")).Do()
+						}
+					}
 				} else { //訊息來自 群組
 					if message.Text == "/dice" && isDice == false {
 						log.Print("Start DiceGame")
@@ -362,6 +393,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						isGuess = false
 						isBlow = false
 						isGameStart = false
+						isBlowGameStart = false
 						WhoRound = 0
 						PreUserRound = 0
 						NextUserRound = 0
