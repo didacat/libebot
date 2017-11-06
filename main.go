@@ -364,6 +364,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								UserName := message.Text[6:len(message.Text)]
 								for i, value := range UserIDSlice {
 									if userID == value {
+										log.Print(userID)
 										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+" 玩家名稱已改成 "+UserName)).Do()
 										UserNameSlice[i] = UserName
 									} else {
