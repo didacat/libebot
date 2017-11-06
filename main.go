@@ -186,6 +186,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Print(UserAnsMap[value])
 
 						}
+					} else {
+						bot.PushMessage(userID, linebot.NewTextMessage("請輸入 1 ~ 6 , 其中一數字")).Do()
 					}
 
 					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+"選擇把  "+UserAnser+"拿掉\n換"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
