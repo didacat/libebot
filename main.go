@@ -349,10 +349,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				} else if groupID == "" && UserIDSlice[WhoRound] == userID && isBlow { //如果訊息來自 有發言權的 使用者 並且在玩吹牛
 					log.Print(userID + "講話啦~~" + message.Text)
 					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
-					var UserSpeakDiceCount int = 0
+					UserSpeakDiceCount := 0
 					UserSpeakDiceValue := 0
-					// SplitArr := [2]string{"", ""}
-					// SplitArr = strings.Split(message.Text, "/")
+					//拆解玩家回答的字串 16/3  == 16個3  或者是 抓
 					for i, value := range strings.Split(message.Text, "/") {
 						if i == 0 {
 							UserSpeakDiceCount, err = strconv.Atoi(value)
@@ -362,11 +361,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 					log.Print("UserSpeakDiceCount == " + strconv.Itoa(UserSpeakDiceCount))
 					log.Print("UserSpeakDiceValue == " + strconv.Itoa(UserSpeakDiceValue))
-
-					//拆解玩家回答的字串 16/3  == 16個3  或者是 抓
+					//判斷 是否有符合規則
+					isBigger := false
+					if UserSpeakDiceCount > NeedDiceCount {
+						isBigger = true
+					} else if UserSpeakDiceCount == NeedDiceCount && UserSpeakDiceValue > NeedDiceValue {
+						isBigger = true
+					}
 
 					//如果符合規則 則換下一個玩家作答
-					if message.Text == "1" {
+					if isBigger {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 吹了   "+strconv.Itoa(UserSpeakDiceCount)+" 個 "+strconv.Itoa(UserSpeakDiceValue)+"\n 現在換"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
 					} else if message.Text == "抓" {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 選擇抓爆 "+UserNameSlice[PreUserRound])).Do()
