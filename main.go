@@ -362,7 +362,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						if message.Text[0:6] == "/dice " && isDice == true {
 							//先判斷名稱是否重複 是的話幫玩家修改名字 或是 禁止玩家取同樣名稱
 							UserName := message.Text[6:len(message.Text)]
-							if len(UserIDSlice) >= 4 {
+							if len(UserIDSlice) >= 2 {
 								UserDuplicate := false //玩家是否重複
 								//判斷玩家ID有無重複 有的話變成修改名稱
 								for i, value := range UserIDSlice {
