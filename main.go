@@ -389,11 +389,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							if NeedDiceCount > AllDiceValueAndCountNoOne[NeedDiceValue] {
 								SomeBodyOut = true
 								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在吹牛")).Do()
+							} else {
+								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 沒抓到... ")).Do()
 							}
 						} else { //沒有喊過1的情況
 							if NeedDiceCount > AllDiceValueAndCount[NeedDiceValue] {
 								SomeBodyOut = true
 								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在吹牛")).Do()
+							} else {
+								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 沒抓到... ")).Do()
 							}
 						}
 					} else {
