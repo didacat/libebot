@@ -364,12 +364,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								//判斷玩家ID有無重複 有的話變成修改名稱
 								for i, value := range UserIDSlice {
 									//判斷玩家是否相同名字
-									for _, name := range UserNameSlice {
-										if UserNameSlice[i] == name {
-											bot.PushMessage(groupID, linebot.NewTextMessage(name+" 玩家名稱已存在 ")).Do()
-											return
-										}
+									if UserNameSlice[i] == UserName {
+										bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 玩家名稱已存在 ")).Do()
+										return
 									}
+
 									if userID == value {
 										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+" 玩家名稱已修改成 "+UserName)).Do()
 										UserNameSlice[i] = UserName
@@ -386,11 +385,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								UserDuplicate := false //玩家是否重複
 								//判斷玩家ID有無重複 有的話變成修改名稱
 								for i, value := range UserIDSlice {
-									for _, name := range UserNameSlice {
-										if UserNameSlice[i] == name {
-											bot.PushMessage(groupID, linebot.NewTextMessage(name+" 玩家名稱已存在 ")).Do()
-											return
-										}
+									if UserNameSlice[i] == UserName {
+										bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 玩家名稱已存在 ")).Do()
+										return
 									}
 									if userID == value {
 										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+" 玩家名稱已修改成 "+UserName)).Do()
