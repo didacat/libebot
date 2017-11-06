@@ -19,12 +19,17 @@ var addr = ""
 var isGameStart bool = false     //猜骰子
 var isBlowGameStart bool = false //吹牛
 var isDice bool = false
-var UserNameSlice []string               //玩家名稱
-var UserIDSlice []string                 //玩家ID
-var UserAnsMap = make(map[string]string) //玩家ID跟骰子數值的MAP表
-var UserCanSpeakSlice []bool             //玩家是否能說話
-var UserDiceCount []int                  //玩家的骰子數量
-var WhoRound int = 0                     //輪到誰的INDEX
+var isGuess bool = false
+var isBlow bool = false
+var UserNameSlice []string                   //玩家名稱
+var UserIDSlice []string                     //玩家ID
+var UserAnsMap = make(map[string]string)     //玩家ID跟骰子數值的MAP表
+var UserCanSpeakSlice []bool                 //玩家是否能說話
+var UserDiceCount []int                      //玩家的骰子數量
+var WhoRound int = 0                         //輪到誰的INDEX
+var AllDiceValueAndCount = make(map[int]int) //所有玩家骰子數值跟數量的MAP表
+var NeedDiceCount = 0                        //最少要喊的骰子數量
+var NeedDiceValue = 0                        //最少要喊的骰子數值
 var NextUserRound = 0
 var PreUserRound = 0
 var m_groupID = ""
@@ -74,8 +79,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(err)
 				}*/
 
-				//如果訊息來自 有發言權的 使用者
-				if groupID == "" && UserIDSlice[WhoRound] == userID {
+				//如果訊息來自 有發言權的 使用者 並且在玩猜骰子
+				if groupID == "" && UserIDSlice[WhoRound] == userID && isGuess {
 					log.Print(userID + "講話啦~~" + message.Text)
 					log.Print("WhoRound == " + strconv.Itoa(WhoRound))
 					//如果是上一輪玩家剩一顆骰子 補發照片給她
@@ -341,6 +346,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 
+				} else if groupID == "" && UserIDSlice[WhoRound] == userID && isBlow { //如果訊息來自 有發言權的 使用者 並且在玩吹牛
+
 				} else { //訊息來自 群組
 					if message.Text == "/dice" && isDice == false {
 						log.Print("Start DiceGame")
@@ -352,14 +359,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						UserIDSlice = UserIDSlice[:0]
 						bot.PushMessage(groupID, linebot.NewTextMessage("Stop DiceGame!")).Do()
 						isDice = false
+						isGuess = false
+						isBlow = false
 						isGameStart = false
 						WhoRound = 0
 						PreUserRound = 0
 						NextUserRound = 0
 					}
 
-					if len(message.Text) > 6 && !isGameStart {
-						if message.Text[0:6] == "/dice " && isDice == true {
+					if len(message.Text) > 6 && !isGameStart && !isBlowGameStart {
+						if message.Text[0:6] == "/dice " && isDice && !isBlow {
+							isGuess = true
 							//先判斷名稱是否重複 是的話幫玩家修改名字 或是 禁止玩家取同樣名稱
 							UserName := message.Text[6:len(message.Text)]
 							if len(UserIDSlice) >= 2 {
@@ -420,21 +430,93 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									log.Print(UserName)
 								}
 							}
+						} else if message.Text[0:6] == "/blow " && isDice && !isGuess {
+							isBlow = true
+							//先判斷名稱是否重複 是的話幫玩家修改名字 或是 禁止玩家取同樣名稱
+							UserName := message.Text[6:len(message.Text)]
+							UserDuplicate := false //玩家是否重複
+							//判斷玩家ID有無重複 有的話變成修改名稱
+							for i, value := range UserIDSlice {
+								if UserNameSlice[i] == UserName {
+									bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 玩家名稱已存在 ")).Do()
+									return
+								}
+								if userID == value {
+									bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+" 玩家名稱已修改成 "+UserName)).Do()
+									UserNameSlice[i] = UserName
+									UserDuplicate = true
+
+								}
+							}
+							if !UserDuplicate {
+								UserNameSlice = append(UserNameSlice, UserName)      //紀錄玩家輸入的名稱 之後推撥會顯示玩家名稱的回合
+								UserIDSlice = append(UserIDSlice, userID)            //紀錄玩家的ID 便於後續發送圖片
+								UserDiceCount = append(UserDiceCount, blowdiceCount) //初始都給玩家 6顆骰子
+								UserCanSpeakSlice = append(UserCanSpeakSlice, false) //玩家有無回答的權限
+								TotalUser := ""
+								for _, value := range UserNameSlice {
+									TotalUser += value + ","
+								}
+
+								bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 已加入遊戲\n"+"目前玩家有 : "+TotalUser)).Do()
+								// log.Print(res.DisplayName)
+								log.Print(UserName)
+							}
 						}
 					}
 
-					if message.Text == "/pic" {
-						log.Print("Pic Receive")
-						bot.PushMessage(
-							groupID,
-							linebot.NewImageMessage(
-								"https://raw.githubusercontent.com/didacat/linebot/master/images/1.png",
-								"https://raw.githubusercontent.com/didacat/linebot/master/images/1.png",
-							),
-						).Do()
+					if message.Text == "/blowstart" && !isGameStart && !isBlowGameStart {
+						isBlowGameStart = true
+						log.Print("blowstart Receive")
+						m_groupID = groupID
+						NeedDiceCount = len(UserIDSlice) + 1 //最少要 (玩家數量+1) 當作起始值
+						for _, value := range UserIDSlice {
+							rand.Seed(time.Now().UnixNano())
+							SliceValue := make([]int, blowdiceCount)
+							// arrValue := [...]int{1,2,3,4,5,6}
+							NumerString := ""
+							for _, element := range SliceValue {
+								element = rand.Intn(6)
+								element = element + 1
+								NumerString = NumerString + strconv.Itoa(element)
+								if element == 1 {
+									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+								} else if element == 2 {
+									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+								} else if element == 3 {
+									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+								} else if element == 4 {
+									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+								} else if element == 5 {
+									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+								} else if element == 6 {
+									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+								}
+							}
+							UserAnsMap[value] = NumerString
+							log.Print("NumerString = " + NumerString)
+							log.Print(UserAnsMap)
+							log.Print(AllDiceValueAndCount)
+							log.Print(value)
+							//發送給玩家圖片
+							// bot.PushMessage(value, linebot.NewTextMessage("==此局為新的一局牌面==")).Do()
+							bot.PushMessage(
+								value,
+								linebot.NewImageMessage(
+									"https://jenny-web.herokuapp.com/dice/merge/"+NumerString+"/0/564531635164",
+									"https://jenny-web.herokuapp.com/dice/merge/"+NumerString+"/0/564531635164",
+								),
+							).Do()
+						}
+						rand.Seed(time.Now().UnixNano())
+						WhoRound = rand.Intn(len(UserIDSlice))
+						//讓第一位玩家 可以回答
+						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子點數及數量")).Do()
+						//發給群組 現在是誰的回合
+						bot.PushMessage(groupID, linebot.NewTextMessage("現在是 "+UserNameSlice[WhoRound]+"的回合")).Do()
 					}
 
-					if message.Text == "/dicestart" && !isGameStart {
+					if message.Text == "/dicestart" && !isGameStart && !isBlowGameStart {
 						isGameStart = true
 						log.Print("dicestart Receive")
 						m_groupID = groupID
