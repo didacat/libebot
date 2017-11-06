@@ -364,7 +364,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								for i, value := range UserIDSlice {
 									if userID == value {
 										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+"已經加入遊戲了")).Do()
-										break
+										return
 									}
 								}
 
