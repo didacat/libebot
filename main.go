@@ -361,31 +361,32 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								bot.PushMessage(groupID, linebot.NewTextMessage("人數已滿 , 請等下一輪")).Do()
 								break
 							} else {
+								UserName := message.Text[6:len(message.Text)]
 								for i, value := range UserIDSlice {
 									if userID == value {
-										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+"已經加入遊戲了")).Do()
-										return
+										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+" 玩家名稱已改成 "+UserName)).Do()
+										UserNameSlice[i] = UserName
+									} else {
+										//log.Print("user input" message.Text)
+										res, err := bot.GetProfile(userID).Do()
+										if err != nil {
+											log.Print(err)
+										}
+
+										UserNameSlice = append(UserNameSlice, UserName)      //紀錄玩家輸入的名稱 之後推撥會顯示玩家名稱的回合
+										UserIDSlice = append(UserIDSlice, userID)            //紀錄玩家的ID 便於後續發送圖片
+										UserDiceCount = append(UserDiceCount, diceCount)     //初始都給玩家 6顆骰子
+										UserCanSpeakSlice = append(UserCanSpeakSlice, false) //玩家有無回答的權限
+										TotalUser := ""
+										for _, value := range UserNameSlice {
+											TotalUser += value + ","
+										}
+
+										bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 已加入遊戲\n"+"目前玩家有 : "+TotalUser)).Do()
+										log.Print(res.DisplayName)
+										log.Print(UserName)
 									}
 								}
-
-								//log.Print("user input" message.Text)
-								res, err := bot.GetProfile(userID).Do()
-								if err != nil {
-									log.Print(err)
-								}
-								UserName := message.Text[6:len(message.Text)]
-								UserNameSlice = append(UserNameSlice, UserName)      //紀錄玩家輸入的名稱 之後推撥會顯示玩家名稱的回合
-								UserIDSlice = append(UserIDSlice, userID)            //紀錄玩家的ID 便於後續發送圖片
-								UserDiceCount = append(UserDiceCount, diceCount)     //初始都給玩家 6顆骰子
-								UserCanSpeakSlice = append(UserCanSpeakSlice, false) //玩家有無回答的權限
-								TotalUser := ""
-								for _, value := range UserNameSlice {
-									TotalUser += value + ","
-								}
-
-								bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 已加入遊戲\n"+"目前玩家有 : "+TotalUser)).Do()
-								log.Print(res.DisplayName)
-								log.Print(UserName)
 							}
 						}
 					}
