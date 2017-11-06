@@ -29,6 +29,7 @@ var UserDiceCount []int                           //玩家的骰子數量
 var WhoRound int = 0                              //輪到誰的INDEX
 var AllDiceValueAndCount = make(map[int]int)      //所有玩家骰子數值跟數量的MAP表 一代表任何數
 var AllDiceValueAndCountNoOne = make(map[int]int) //所有玩家骰子數值跟數量的MAP表 一被喊掉後 不代表任何數
+var isUseOne bool = false                         //點數1是某被喊掉了
 var NeedDiceCount = 0                             //最少要喊的骰子數量
 var NeedDiceValue = 0                             //最少要喊的骰子數值
 var NextUserRound = 0
@@ -358,6 +359,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							UserSpeakDiceCount, err = strconv.Atoi(value)
 						} else if i == 1 {
 							UserSpeakDiceValue, err = strconv.Atoi(value)
+							if UserSpeakDiceValue == 1 {
+								isUseOne = true
+							}
 						}
 					}
 					log.Print("UserSpeakDiceCount == " + strconv.Itoa(UserSpeakDiceCount))
@@ -373,12 +377,23 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						NeedDiceValue = UserSpeakDiceValue
 						isBigger = true
 					}
-
+					SomeBodyOut := false //是否抓到
 					//如果符合規則 則換下一個玩家作答
 					if isBigger {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 吹了   "+strconv.Itoa(UserSpeakDiceCount)+" 個 "+strconv.Itoa(UserSpeakDiceValue)+"\n 現在換"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
 					} else if message.Text == "抓" {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 選擇抓爆 "+UserNameSlice[PreUserRound])).Do()
+						//判斷牌面是否有喊中
+						//有喊過1的情況
+						if isUseOne {
+							if NeedDiceCount > AllDiceValueAndCountNoOne[NeedDiceValue] {
+								SomeBodyOut = true
+							}
+						} else { //沒有喊過1的情況
+							if NeedDiceCount > AllDiceValueAndCount[NeedDiceValue] {
+								SomeBodyOut = true
+							}
+						}
 					} else {
 						bot.PushMessage(userID, linebot.NewTextMessage("請輸入 x/x 這種格式\n並且要大於上一家喊的牌面 \n或是輸入 抓")).Do()
 						return
@@ -392,7 +407,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 					//
 
-					SomeBodyOut := false //是否抓到
+					// SomeBodyOut := false //是否抓到
 
 					//如果沒有人出局的話 就繼續發送訊息給下一位
 					if SomeBodyOut == false {
