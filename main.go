@@ -31,7 +31,7 @@ var AllDiceValueAndCount = make(map[int]int)      //所有玩家骰子數值跟�
 var AllDiceValueAndCountNoOne = make(map[int]int) //所有玩家骰子數值跟數量的MAP表 一被喊掉後 不代表任何數
 var isUseOne bool = false                         //點數1是某被喊掉了
 var NeedDiceCount = 0                             //最少要喊的骰子數量
-var NeedDiceValue = 0                             //最少要喊的骰子數值
+var NeedDiceValue = 1                             //最少要喊的骰子數值
 var NextUserRound = 0
 var PreUserRound = 0
 var m_groupID = ""
@@ -366,6 +366,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 					log.Print("UserSpeakDiceCount == " + strconv.Itoa(UserSpeakDiceCount))
 					log.Print("UserSpeakDiceValue == " + strconv.Itoa(UserSpeakDiceValue))
+					log.Print("NeedDiceCount == " + strconv.Itoa(NeedDiceCount))
+					log.Print("NeedDiceValue == " + strconv.Itoa(NeedDiceValue))
 					//判斷 是否有符合規則
 					isBigger := false
 					if UserSpeakDiceCount > NeedDiceCount && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 && NeedDiceValue != 0 {
@@ -438,7 +440,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						isGameStart = false
 						isBlowGameStart = false
 						isUseOne = false
-						NeedDiceValue = 0
+						NeedDiceValue = 1
 						NeedDiceCount = 0
 						WhoRound = 0
 						PreUserRound = 0
