@@ -467,7 +467,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						//讓第一位玩家 可以回答
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑")).Do()
 						//發給群組 現在是誰的回合
-						bot.PushMessage(groupID, linebot.NewTextMessage("現在是 "+UserNameSlice[0]+"的回合")).Do()
+						bot.PushMessage(groupID, linebot.NewTextMessage("現在是 "+UserNameSlice[WhoRound]+"的回合")).Do()
 
 					}
 				}
