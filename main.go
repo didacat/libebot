@@ -21,15 +21,16 @@ var isBlowGameStart bool = false //吹牛
 var isDice bool = false
 var isGuess bool = false
 var isBlow bool = false
-var UserNameSlice []string                   //玩家名稱
-var UserIDSlice []string                     //玩家ID
-var UserAnsMap = make(map[string]string)     //玩家ID跟骰子數值的MAP表
-var UserCanSpeakSlice []bool                 //玩家是否能說話
-var UserDiceCount []int                      //玩家的骰子數量
-var WhoRound int = 0                         //輪到誰的INDEX
-var AllDiceValueAndCount = make(map[int]int) //所有玩家骰子數值跟數量的MAP表
-var NeedDiceCount = 0                        //最少要喊的骰子數量
-var NeedDiceValue = 0                        //最少要喊的骰子數值
+var UserNameSlice []string                        //玩家名稱
+var UserIDSlice []string                          //玩家ID
+var UserAnsMap = make(map[string]string)          //玩家ID跟骰子數值的MAP表
+var UserCanSpeakSlice []bool                      //玩家是否能說話
+var UserDiceCount []int                           //玩家的骰子數量
+var WhoRound int = 0                              //輪到誰的INDEX
+var AllDiceValueAndCount = make(map[int]int)      //所有玩家骰子數值跟數量的MAP表 一代表任何數
+var AllDiceValueAndCountNoOne = make(map[int]int) //所有玩家骰子數值跟數量的MAP表 一被喊掉後 不代表任何數
+var NeedDiceCount = 0                             //最少要喊的骰子數量
+var NeedDiceValue = 0                             //最少要喊的骰子數值
 var NextUserRound = 0
 var PreUserRound = 0
 var m_groupID = ""
@@ -533,23 +534,35 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								element = element + 1
 								NumerString = NumerString + strconv.Itoa(element)
 								if element == 1 {
-									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
+									AllDiceValueAndCount[1] = AllDiceValueAndCount[1] + 1
+									AllDiceValueAndCount[2] = AllDiceValueAndCount[2] + 1
+									AllDiceValueAndCount[3] = AllDiceValueAndCount[3] + 1
+									AllDiceValueAndCount[4] = AllDiceValueAndCount[4] + 1
+									AllDiceValueAndCount[5] = AllDiceValueAndCount[5] + 1
+									AllDiceValueAndCount[6] = AllDiceValueAndCount[6] + 1
 								} else if element == 2 {
 									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 								} else if element == 3 {
 									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 								} else if element == 4 {
 									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 								} else if element == 5 {
 									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 								} else if element == 6 {
 									AllDiceValueAndCount[element] = AllDiceValueAndCount[element] + 1
+									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 								}
 							}
 							UserAnsMap[value] = NumerString
 							log.Print("NumerString = " + NumerString)
 							log.Print(UserAnsMap)
 							log.Print(AllDiceValueAndCount)
+							log.Print(AllDiceValueAndCountNoOne)
 							log.Print(value)
 							//發送給玩家圖片
 							// bot.PushMessage(value, linebot.NewTextMessage("==此局為新的一局牌面==")).Do()
