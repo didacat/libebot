@@ -343,7 +343,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						log.Print("Start DiceGame")
 						bot.PushMessage(groupID, linebot.NewTextMessage("Start DiceGame!")).Do()
 						isDice = true
-					} else if message.Text == "/dicestop" && isDice == true {
+					} else if message.Text == "/gg" && isDice == true {
 						log.Print("Stop DiceGame")
 						UserNameSlice = UserNameSlice[:0]
 						UserIDSlice = UserIDSlice[:0]
@@ -357,24 +357,36 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					if len(message.Text) > 6 && !isGameStart {
 						if message.Text[0:6] == "/dice " && isDice == true {
-							//log.Print("user input" message.Text)
-							res, err := bot.GetProfile(userID).Do()
-							if err != nil {
-								log.Print(err)
-							}
-							UserName := message.Text[6:len(message.Text)]
-							UserNameSlice = append(UserNameSlice, UserName)      //紀錄玩家輸入的名稱 之後推撥會顯示玩家名稱的回合
-							UserIDSlice = append(UserIDSlice, userID)            //紀錄玩家的ID 便於後續發送圖片
-							UserDiceCount = append(UserDiceCount, diceCount)     //初始都給玩家 6顆骰子
-							UserCanSpeakSlice = append(UserCanSpeakSlice, false) //玩家有無回答的權限
-							TotalUser := ""
-							for _, value := range UserNameSlice {
-								TotalUser += value + ","
-							}
+							if len(UserIDSlice) >= 2 {
+								bot.PushMessage(groupID, linebot.NewTextMessage("人數已滿 , 請等下一輪")).Do()
+								break
+							} else {
+								for i, value := range UserIDSlice {
+									if userID == value {
+										bot.PushMessage(groupID, linebot.NewTextMessage(UserNameSlice[i]+"已經加入遊戲了")).Do()
+										break
+									}
+								}
 
-							bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 已加入遊戲\n"+"目前玩家有 : "+TotalUser)).Do()
-							log.Print(res.DisplayName)
-							log.Print(UserName)
+								//log.Print("user input" message.Text)
+								res, err := bot.GetProfile(userID).Do()
+								if err != nil {
+									log.Print(err)
+								}
+								UserName := message.Text[6:len(message.Text)]
+								UserNameSlice = append(UserNameSlice, UserName)      //紀錄玩家輸入的名稱 之後推撥會顯示玩家名稱的回合
+								UserIDSlice = append(UserIDSlice, userID)            //紀錄玩家的ID 便於後續發送圖片
+								UserDiceCount = append(UserDiceCount, diceCount)     //初始都給玩家 6顆骰子
+								UserCanSpeakSlice = append(UserCanSpeakSlice, false) //玩家有無回答的權限
+								TotalUser := ""
+								for _, value := range UserNameSlice {
+									TotalUser += value + ","
+								}
+
+								bot.PushMessage(groupID, linebot.NewTextMessage(UserName+" 已加入遊戲\n"+"目前玩家有 : "+TotalUser)).Do()
+								log.Print(res.DisplayName)
+								log.Print(UserName)
+							}
 						}
 					}
 
