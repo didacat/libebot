@@ -364,8 +364,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					//判斷 是否有符合規則
 					isBigger := false
 					if UserSpeakDiceCount > NeedDiceCount {
+						NeedDiceCount = UserSpeakDiceCount
+						NeedDiceValue = UserSpeakDiceCount
 						isBigger = true
-					} else if UserSpeakDiceCount == NeedDiceCount && UserSpeakDiceValue > NeedDiceValue {
+					} else if UserSpeakDiceCount == NeedDiceCount && UserSpeakDiceValue > NeedDiceValue && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 {
+						NeedDiceCount = UserSpeakDiceCount
+						NeedDiceValue = UserSpeakDiceCount
 						isBigger = true
 					}
 
@@ -375,7 +379,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					} else if message.Text == "抓" {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 選擇抓爆 "+UserNameSlice[PreUserRound])).Do()
 					} else {
-						bot.PushMessage(userID, linebot.NewTextMessage("請輸入 x/x 這種格式 或是輸入 抓")).Do()
+						bot.PushMessage(userID, linebot.NewTextMessage("請輸入 x/x 這種格式並且要大於上一家喊的牌面 \n或是輸入 抓")).Do()
 						return
 					}
 
