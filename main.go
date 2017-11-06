@@ -443,11 +443,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						WhoRound = 0
 						PreUserRound = 0
 						NextUserRound = 0
-						for _,value :=range AllDiceValueAndCountNoOne{
-							value = 0
+						for i,_ :=range AllDiceValueAndCountNoOne{
+							AllDiceValueAndCountNoOne[i+1] = 0
 						}
-						for _,value :=range AllDiceValueAndCount{
-							value = 0
+						for i,_ :=range AllDiceValueAndCount{
+							AllDiceValueAndCount[i+1] = 0
 						}
 					}
 
