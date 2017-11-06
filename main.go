@@ -16,7 +16,8 @@ import (
 var bot *linebot.Client
 var port = ""
 var addr = ""
-var isGameStart bool = false
+var isGameStart bool = false     //猜骰子
+var isBlowGameStart bool = false //吹牛
 var isDice bool = false
 var UserNameSlice []string               //玩家名稱
 var UserIDSlice []string                 //玩家ID
@@ -29,10 +30,11 @@ var PreUserRound = 0
 var m_groupID = ""
 
 var diceCount = 10
+var blowdiceCount = 6
 
-type DiceValue struct {
-	Values []string
-}
+// type DiceValue struct {
+// 	Values []string
+// }
 
 func main() {
 	var err error
@@ -188,6 +190,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					} else {
 						bot.PushMessage(userID, linebot.NewTextMessage("請輸入 1 ~ 6 , 其中一數字")).Do()
+						return
 					}
 
 					bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+"選擇把  "+UserAnser+"拿掉\n換"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
@@ -459,6 +462,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								),
 							).Do()
 						}
+						rand.Seed(time.Now().UnixNano())
+						WhoRound = rand.Intn(len(UserIDSlice))
 						//讓第一位玩家 可以回答
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage("請決定你要喊的骰子\n 1)單 \n 2)雙 \n 3)大\n 4)小 \n 5)紅 \n 6)黑")).Do()
 						//發給群組 現在是誰的回合
