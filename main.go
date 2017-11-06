@@ -437,9 +437,18 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						isBlow = false
 						isGameStart = false
 						isBlowGameStart = false
+						isUseOne = false
+						NeedDiceValue = 0
+						NeedDiceCount = 0
 						WhoRound = 0
 						PreUserRound = 0
 						NextUserRound = 0
+						for _,value range AllDiceValueAndCountNoOne{
+							value = 0
+						}
+						for _,value range AllDiceValueAndCount{
+							value = 0
+						}
 					}
 
 					if len(message.Text) > 6 && !isGameStart && !isBlowGameStart {
