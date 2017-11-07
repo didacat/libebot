@@ -388,6 +388,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					SomeBodyOut := false //是否抓到
 					//如果符合規則 則換下一個玩家作答
 					if isBigger {
+						NextUserRound = WhoRound
 						if WhoRound+1 >= len(UserIDSlice) {
 							NextUserRound = 0
 						} else {
