@@ -376,11 +376,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 					//判斷 是否有符合規則
 					isBigger := false
-					if UserSpeakDiceCount > NeedDiceCount && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 && NeedDiceValue != 0 {
+					if UserSpeakDiceCount > NeedDiceCount && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 {
 						NeedDiceCount = UserSpeakDiceCount
 						NeedDiceValue = UserSpeakDiceValue
 						isBigger = true
-					} else if UserSpeakDiceCount == NeedDiceCount && UserSpeakDiceValue > NeedDiceValue && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 && NeedDiceValue != 0 {
+					} else if UserSpeakDiceCount == NeedDiceCount && UserSpeakDiceValue > NeedDiceValue && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 {
 						NeedDiceCount = UserSpeakDiceCount
 						NeedDiceValue = UserSpeakDiceValue
 						isBigger = true
