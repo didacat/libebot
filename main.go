@@ -396,7 +396,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 吹了   "+strconv.Itoa(UserSpeakDiceCount)+" 個 "+strconv.Itoa(UserSpeakDiceValue)+"\n 現在換"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
 					} else if message.Text == "抓" {
-						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 選擇抓爆 "+UserNameSlice[PreUserRound])).Do()
+						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 要抓爆 "+UserNameSlice[PreUserRound])).Do()
 						//如果是第一位玩家 喊的時候 不能喊抓
 						if isFirstRound {
 							bot.PushMessage(userID, linebot.NewTextMessage("請輸入 x/x 這種格式\n並且要大於"+strconv.Itoa(NeedDiceCount)+"個"+strconv.Itoa(NeedDiceValue)+"的牌面")).Do()
@@ -406,7 +406,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							if isUseOne {
 								if NeedDiceCount > AllDiceValueAndCountNoOne[NeedDiceValue] {
 									SomeBodyOut = true
-									bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在吹牛")).Do()
+									bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在假鬼假怪")).Do()
 								} else {
 									bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 沒抓到... ")).Do()
 								}
