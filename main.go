@@ -415,7 +415,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								for i, value := range UserNameSlice {
 									TotalMsg += value + " = " + UserAnsMap[UserIDSlice[i]] + "\n"
 								}
-								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[NeedDiceValue])+"個"+strconv.Itoa(NeedDiceValue))).Do()
+								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCountNoOne[NeedDiceValue])+"個"+strconv.Itoa(NeedDiceValue))).Do()
 							} else { //沒有喊過1的情況
 								if NeedDiceCount > AllDiceValueAndCount[NeedDiceValue] {
 									SomeBodyOut = true
@@ -613,7 +613,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							for _, element := range SliceValue {
 								element = rand.Intn(6)
 								element = element + 1
-								NumerString = NumerString + strconv.Itoa(element)
+								NumerString = NumerString + strconv.Itoa(element) + ","
 								if element == 1 {
 									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 									AllDiceValueAndCount[1] = AllDiceValueAndCount[1] + 1
