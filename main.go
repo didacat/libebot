@@ -600,6 +600,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					if message.Text == "/blowstart" && !isGameStart && !isBlowGameStart {
 						isBlowGameStart = true
+						isBlow = true
 						log.Print("blowstart Receive")
 						m_groupID = groupID
 						NeedDiceCount = len(UserIDSlice) + 1 //最少要 (玩家數量+1) 當作起始值
