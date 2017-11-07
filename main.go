@@ -412,9 +412,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 								TotalMsg := ""
 								for i, value := range UserNameSlice {
-									TotalMsg = value + " = " + UserAnsMap[UserIDSlice[i]] + "\n"
+									TotalMsg += value + " = " + UserAnsMap[UserIDSlice[i]] + "\n"
 								}
-								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[UserSpeakDiceValue])+"個"+strconv.Itoa(UserSpeakDiceValue))).Do()
+								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[NeedDiceValue])+"個"+strconv.Itoa(NeedDiceValue))).Do()
 							} else { //沒有喊過1的情況
 								if NeedDiceCount > AllDiceValueAndCount[NeedDiceValue] {
 									SomeBodyOut = true
@@ -425,9 +425,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 								TotalMsg := ""
 								for i, value := range UserNameSlice {
-									TotalMsg = value + " = " + UserAnsMap[UserIDSlice[i]] + "\n"
+									TotalMsg += value + " = " + UserAnsMap[UserIDSlice[i]] + "\n"
 								}
-								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[UserSpeakDiceValue])+"個"+strconv.Itoa(UserSpeakDiceValue))).Do()
+								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[NeedDiceValue])+"個"+strconv.Itoa(NeedDiceValue))).Do()
 							}
 						}
 
