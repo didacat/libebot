@@ -665,7 +665,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						//讓第一位玩家 可以回答
 						bot.PushMessage(UserIDSlice[WhoRound], linebot.NewTextMessage(" 請決定你要喊的骰子點數及數量 格式為 x/x (e.g.: 3/3)")).Do()
 						//發給群組 現在是誰的回合
-						bot.PushMessage(groupID, linebot.NewTextMessage("現在是 "+UserNameSlice[WhoRound]+"的回合")).Do()
+						bot.PushMessage(groupID, linebot.NewTextMessage("此輪總共有 "+strconv.Itoa(len(UserNameSlice))+"位玩家\n現在是 "+UserNameSlice[WhoRound]+"的回合")).Do()
 					}
 
 					if message.Text == "/dicestart" && !isGameStart && !isBlowGameStart {
