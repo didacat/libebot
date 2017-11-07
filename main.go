@@ -388,6 +388,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					SomeBodyOut := false //是否抓到
 					//如果符合規則 則換下一個玩家作答
 					if isBigger {
+						if WhoRound+1 >= len(UserIDSlice) {
+							NextUserRound = 0
+						} else {
+							NextUserRound += 1
+						}
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 吹了   "+strconv.Itoa(UserSpeakDiceCount)+" 個 "+strconv.Itoa(UserSpeakDiceValue)+"\n 現在換"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
 					} else if message.Text == "抓" {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 選擇抓爆 "+UserNameSlice[PreUserRound])).Do()
@@ -420,11 +425,30 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 								TotalMsg := ""
 								for i, _ := range UserNameSlice {
-									TotalMsg = UserNameSlice[i] + " = " + UserAnsMap[UserNameSlice[i]]
+									TotalMsg = UserNameSlice[i] + " = " + UserAnsMap[UserNameSlice[i]] + "\n"
 								}
 								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[UserSpeakDiceValue])+"個"+strconv.Itoa(UserSpeakDiceValue))).Do()
 							}
 						}
+
+						isDice = false
+						isGuess = false
+						isBlow = false
+						isGameStart = false
+						isBlowGameStart = false
+						isUseOne = false
+						NeedDiceValue = 1
+						NeedDiceCount = 0
+						WhoRound = 0
+						PreUserRound = 0
+						NextUserRound = 0
+						for i, _ := range AllDiceValueAndCountNoOne {
+							AllDiceValueAndCountNoOne[i+1] = 0
+						}
+						for i, _ := range AllDiceValueAndCount {
+							AllDiceValueAndCount[i+1] = 0
+						}
+
 					} else {
 						bot.PushMessage(userID, linebot.NewTextMessage("請輸入 x/x 這種格式\n並且要大於上一家喊的牌面 \n或是輸入 抓")).Do()
 						return
