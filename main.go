@@ -431,13 +431,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							}
 						}
 
-						isDice = false
+						// isDice = false
 						isGuess = false
 						isBlow = false
 						isGameStart = false
 						isBlowGameStart = false
 						isUseOne = false
-						NeedDiceValue = 1
+						NeedDiceValue = 0
 						NeedDiceCount = 0
 						WhoRound = 0
 						PreUserRound = 0
@@ -487,7 +487,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						isGameStart = false
 						isBlowGameStart = false
 						isUseOne = false
-						NeedDiceValue = 1
+						NeedDiceValue = 0
 						NeedDiceCount = 0
 						WhoRound = 0
 						PreUserRound = 0
