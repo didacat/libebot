@@ -603,7 +603,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						isBlow = true
 						log.Print("blowstart Receive")
 						m_groupID = groupID
-						NeedDiceCount = len(UserIDSlice) + 1 //最少要 (玩家數量+1) 當作起始值
+						NeedDiceCount = len(UserIDSlice) //最少要 (玩家數量) 當作起始值
 						for _, value := range UserIDSlice {
 							rand.Seed(time.Now().UnixNano())
 							SliceValue := make([]int, blowdiceCount)
