@@ -610,10 +610,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							SliceValue := make([]int, blowdiceCount)
 							// arrValue := [...]int{1,2,3,4,5,6}
 							NumerString := ""
+							NumerStringForMap := ""
 							for _, element := range SliceValue {
 								element = rand.Intn(6)
 								element = element + 1
-								NumerString = NumerString + strconv.Itoa(element) + ","
+								NumerString = NumerString + strconv.Itoa(element)
+								NumerStringForMap = NumerStringForMap + strconv.Itoa(element) + ","
 								if element == 1 {
 									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 									AllDiceValueAndCount[1] = AllDiceValueAndCount[1] + 1
@@ -639,7 +641,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									AllDiceValueAndCountNoOne[element] = AllDiceValueAndCountNoOne[element] + 1
 								}
 							}
-							UserAnsMap[value] = NumerString
+							UserAnsMap[value] = NumerStringForMap
 							log.Print("NumerString = " + NumerString)
 							log.Print(UserAnsMap)
 							log.Print(AllDiceValueAndCount)
