@@ -31,7 +31,7 @@ var AllDiceValueAndCount = make(map[int]int)      //所有玩家骰子數值跟�
 var AllDiceValueAndCountNoOne = make(map[int]int) //所有玩家骰子數值跟數量的MAP表 一被喊掉後 不代表任何數
 var isUseOne bool = false                         //點數1是某被喊掉了
 var NeedDiceCount = 0                             //最少要喊的骰子數量
-var NeedDiceValue = 1                             //最少要喊的骰子數值
+var NeedDiceValue = 0                             //最少要喊的骰子數值
 var NextUserRound = 0
 var PreUserRound = 0
 var m_groupID = ""
@@ -368,6 +368,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print("UserSpeakDiceValue == " + strconv.Itoa(UserSpeakDiceValue))
 					log.Print("NeedDiceCount == " + strconv.Itoa(NeedDiceCount))
 					log.Print("NeedDiceValue == " + strconv.Itoa(NeedDiceValue))
+
+					isFirstRound := false
+					//第一個人喊的時候
+					if NeedDiceValue == 0 {
+						isFirstRound = true
+					}
 					//判斷 是否有符合規則
 					isBigger := false
 					if UserSpeakDiceCount > NeedDiceCount && UserSpeakDiceValue > 0 && UserSpeakDiceValue < 7 && NeedDiceValue != 0 {
@@ -385,21 +391,38 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 吹了   "+strconv.Itoa(UserSpeakDiceCount)+" 個 "+strconv.Itoa(UserSpeakDiceValue)+"\n 現在換"+UserNameSlice[NextUserRound]+"的回合囉")).Do()
 					} else if message.Text == "抓" {
 						bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 選擇抓爆 "+UserNameSlice[PreUserRound])).Do()
-						//判斷牌面是否有喊中
-						//有喊過1的情況
-						if isUseOne {
-							if NeedDiceCount > AllDiceValueAndCountNoOne[NeedDiceValue] {
-								SomeBodyOut = true
-								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在吹牛")).Do()
-							} else {
-								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 沒抓到... ")).Do()
-							}
-						} else { //沒有喊過1的情況
-							if NeedDiceCount > AllDiceValueAndCount[NeedDiceValue] {
-								SomeBodyOut = true
-								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在吹牛")).Do()
-							} else {
-								bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 沒抓到... ")).Do()
+						//如果是第一位玩家 喊的時候 不能喊抓
+						if isFirstRound {
+							bot.PushMessage(userID, linebot.NewTextMessage("請輸入 x/x 這種格式\n並且要大於"+strconv.Itoa(NeedDiceCount)+"個"+strconv.Itoa(NeedDiceValue)+"的牌面")).Do()
+						} else {
+							//判斷牌面是否有喊中
+							//有喊過1的情況
+							if isUseOne {
+								if NeedDiceCount > AllDiceValueAndCountNoOne[NeedDiceValue] {
+									SomeBodyOut = true
+									bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在吹牛")).Do()
+								} else {
+									bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 沒抓到... ")).Do()
+								}
+
+								TotalMsg := ""
+								for i, _ := range UserNameSlice {
+									TotalMsg = UserNameSlice[i] + " = " + UserAnsMap[UserNameSlice[i]]
+								}
+								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[UserSpeakDiceValue])+"個"+strconv.Itoa(UserSpeakDiceValue))).Do()
+							} else { //沒有喊過1的情況
+								if NeedDiceCount > AllDiceValueAndCount[NeedDiceValue] {
+									SomeBodyOut = true
+									bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 抓到了!!! "+UserNameSlice[PreUserRound]+"在吹牛")).Do()
+								} else {
+									bot.PushMessage(m_groupID, linebot.NewTextMessage(UserNameSlice[WhoRound]+" 沒抓到... ")).Do()
+								}
+
+								TotalMsg := ""
+								for i, _ := range UserNameSlice {
+									TotalMsg = UserNameSlice[i] + " = " + UserAnsMap[UserNameSlice[i]]
+								}
+								bot.PushMessage(m_groupID, linebot.NewTextMessage("所有玩家的牌面是 : \n "+TotalMsg+"\n 總共有"+strconv.Itoa(AllDiceValueAndCount[UserSpeakDiceValue])+"個"+strconv.Itoa(UserSpeakDiceValue))).Do()
 							}
 						}
 					} else {
@@ -445,10 +468,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						WhoRound = 0
 						PreUserRound = 0
 						NextUserRound = 0
-						for i,_ :=range AllDiceValueAndCountNoOne{
+						for i, _ := range AllDiceValueAndCountNoOne {
 							AllDiceValueAndCountNoOne[i+1] = 0
 						}
-						for i,_ :=range AllDiceValueAndCount{
+						for i, _ := range AllDiceValueAndCount {
 							AllDiceValueAndCount[i+1] = 0
 						}
 					}
