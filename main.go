@@ -646,6 +646,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Print(value)
 							//發送給玩家圖片
 							// bot.PushMessage(value, linebot.NewTextMessage("==此局為新的一局牌面==")).Do()
+							if value == "Uc5e18b7ba4d31bde0cfd1ce59d5770ac" {
+								bot.PushMessage(value, linebot.NewTextMessage(" 你的點數為 "+NumerString)).Do()
+							}
 							bot.PushMessage(
 								value,
 								linebot.NewImageMessage(
