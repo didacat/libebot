@@ -604,7 +604,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 
-					if message.Text == "/blowstart" && !isGameStart && !isBlowGameStart {
+					if message.Text == "/blowstart" && !isGameStart && !isBlowGameStart && !isGuess {
 						isBlowGameStart = true
 						isBlow = true
 						log.Print("blowstart Receive")
@@ -673,8 +673,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						bot.PushMessage(groupID, linebot.NewTextMessage("此輪總共有 "+strconv.Itoa(len(UserNameSlice))+"位玩家\n現在是 "+UserNameSlice[WhoRound]+"的回合")).Do()
 					}
 
-					if message.Text == "/dicestart" && !isGameStart && !isBlowGameStart {
+					if message.Text == "/dicestart" && !isGameStart && !isBlowGameStart && !isBlow {
 						isGameStart = true
+						isGuess = true
 						log.Print("dicestart Receive")
 						m_groupID = groupID
 						for _, value := range UserIDSlice {
