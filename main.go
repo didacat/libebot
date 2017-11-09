@@ -603,7 +603,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							}
 						}
 					}
-
+					if message.Text == "/洗999" {
+						for index := 0; index < 999; index++ {
+							bot.PushMessage(groupID, linebot.NewTextMessage("QQ")).Do()
+						}
+					}
 					if message.Text == "/blowstart" && !isGameStart && !isBlowGameStart && !isGuess {
 						isBlowGameStart = true
 						isBlow = true
